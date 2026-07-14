@@ -1,0 +1,32 @@
+.gitignore# Node modules (bahut heavy hote hain)
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files (passwords, API keys etc.)
+.env
+# .env.local
+# .env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build output
+dist/
+build/
+
+# IDE files
+.vscode/
+.idea/
+
+# Temporary
+*.tmp
+*.swp
+
+# Coverage reports (agar testing use karte ho)
+coverage/
