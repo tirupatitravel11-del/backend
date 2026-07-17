@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import notification from "../../models/config/notification/notificationModel";
-import notificationTokenModel from "../../models/config/notification/notificationTokenModel";
+import notification from "../../models/notification/notificationModel";
+import notificationTokenModel from "../../models/notification/notificationTokenModel";
 
 
 export const notificationToken = async (req: Request, res: Response) => {

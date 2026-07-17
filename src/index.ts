@@ -12,13 +12,18 @@ import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import mongoSanitize from "express-mongo-sanitize";
 import cookieParser from "cookie-parser";
-import statusTypeModel from "./models/config/statusTypeModel";
+import statusTypeModel from "./models/statusTypeModel";
 import { Requser } from "./types/type";
-import notificationTokenModel from "./models/config/notification/notificationTokenModel";
+import notificationTokenModel from "./models/notification/notificationTokenModel";
 // import { redisConnection } from "./redisConnection/redis";
 // import { sanitizeMiddleware } from "./utils/sanitize";
 
+import dns from "dns";
 
+dns.setServers([
+  "8.8.8.8",
+  "8.8.4.4"
+]);
 
 
 dotenv.config();

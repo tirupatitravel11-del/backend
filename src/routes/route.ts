@@ -1,20 +1,20 @@
 import express from "express";
-// import {
-//   createPermission,
-//   deletePermission,
-//   getAllPermission,
-//   // getAllPermission,
-//   getPermissionById,
-// } from "../controllers/permissions";
-// import {
-//   createRole,
-//   deleteRole,
-//   deleteRolePermission,
-//   getCounsellors,
-//   getRoleById,
-//   getRoles,
-//   // getRoles,
-// } from "../controllers/role";
+import {
+  createPermission,
+  deletePermission,
+  getAllPermission,
+  // getAllPermission,
+  getPermissionById,
+} from "../controllers/permissions";
+import {
+  createRole,
+  deleteRole,
+  deleteRolePermission,
+  getCounsellors,
+  getRoleById,
+  getRoles,
+  // getRoles,
+} from "../controllers/role";
 // import {
 //   createUser,
 //   getAllUsers,
@@ -24,7 +24,7 @@ import express from "express";
 //   updateUser,
 // } from "../controllers/createUser";
 // import { deleteUser, Login, LoginForAdmin, signout } from "../controllers/adminLogin";
-// import authMiddleware from "../middleware/authMiddleware";
+import authMiddleware from "../middleware/authMiddleware";
 // import { validateUpload } from "../middleware/validateUpload"
 // import { addAbortListener } from "events";
 // import { blogPublishStatus, createBlog, deleteBlog, editBlog, getAllBlogs, getAllBlogsAdmin, getSingleBlog, getSingleBlogAdmin, restoreBlog } from "../controllers/blog";
@@ -53,6 +53,8 @@ import express from "express";
 // import { createTrainingCourseModule, getTrainingCourseModuleById, getAllTrainingCourseModules, deleteTrainingCourseModule, restoreTrainingCourseModule, updateTrainingCourseModule, bulkCreateModules, globalSettings, getTrainingCourseModuleByIdadmin } from "../controllers/trainingCourseModules";
 // import { createTrainingEnrollOrEnquiry, getTrainingEnquiries } from "../controllers/trainingEnquiry.controller";
 import multer from "multer";
+import { registerUser } from "../controllers/registerUser";
+import { createUserByAdmin, LoginForAdmin } from "../controllers/createUserByAdmin";
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
 // import { createBlog, deleteBlogtwo, getBlogById, getBlogs, updateBlog } from "../controllers/blogtwo";
 // import { getEmailAccounts } from "../controllers/email"
@@ -73,24 +75,29 @@ const upload = multer({ storage: multer.memoryStorage() });
 // router.post("/create-user",checkPermission('create_user'), createUser)
 // router.post("/test-user", testUser);
 
-// router.post("/create-user", authMiddleware, createUser);
+router.post("/register-user", registerUser);
+router.post("/create-user", authMiddleware, createUserByAdmin);
 // router.post("/update-user", authMiddleware, updateUser);
 // router.post("/get-users", authMiddleware, getAllUsers);
 // router.post("/get-single-user", authMiddleware, getSingleUser);
-// router.post("/admin-login", LoginForAdmin);
+router.post("/admin-login", LoginForAdmin);
 // router.post("/login", Login);
 // router.post("/delete-user", authMiddleware, deleteUser)
 // router.post("/logout", userLogout);
-// router.post("/create-permission", authMiddleware, createPermission);
-// router.post("/delete-role-permission", authMiddleware, deleteRolePermission);
-// router.get("/get-all-permission", authMiddleware, getAllPermission);
-// router.post("/get-permission-by-id/:id", authMiddleware, getPermissionById);
-// router.post("/delete-permission", authMiddleware, deletePermission);
-// router.post("/create-role", authMiddleware, createRole);
-// router.get("/get-all-role", authMiddleware, getRoles);
-// router.post("/get-role-by-id/:id", authMiddleware, getRoleById);
-// router.post("/delete-role", authMiddleware, deleteRole);
 
+// ------------------role-----------------
+router.post("/create-role", authMiddleware, createRole);
+router.get("/get-all-role", authMiddleware, getRoles);
+router.post("/get-role-by-id/:id", authMiddleware, getRoleById);
+router.post("/delete-role", authMiddleware, deleteRole);
+router.post("/delete-role-permission", authMiddleware, deleteRolePermission);
+
+
+// ------------------permission-----------------
+router.post("/create-permission", authMiddleware, createPermission);
+router.get("/get-all-permission", authMiddleware, getAllPermission);
+router.post("/get-permission-by-id/:id", authMiddleware, getPermissionById);
+router.post("/delete-permission", authMiddleware, deletePermission);
 
 //--------------------courses------------------
 // router.post("/create-update-course", authMiddleware, createOrUpdateCourse);
@@ -119,7 +126,6 @@ const upload = multer({ storage: multer.memoryStorage() });
 // router.post("/settings", authMiddleware, globalSettings)
 
 //--------------------batches------------------
-
 // router.post("/create-update-batch", authMiddleware, createOrUpdateBatch);
 // router.post("/get-batches", authMiddleware, getBatches);
 // router.post("/get-all-batches", authMiddleware, getAllBatches);
@@ -129,7 +135,6 @@ const upload = multer({ storage: multer.memoryStorage() });
 // router.post("/assign-instructor", authMiddleware, assignInstructorToBatch);
 
 //--------------------enrollment------------------
-
 // router.post("/create-update-enrollment", authMiddleware, studentEnrollment);
 // router.post("/get-enrolled-students", authMiddleware, getEnrolledStudents);
 // router.post("/delete-enrollment", authMiddleware, deleteStudentEnrollment);
@@ -146,13 +151,13 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 
 //-----------user login-------------------
-
 // router.post("/create-payment-plan", createPaymentPlan);
 // router.post("/create-payment-installment", payInstallment);
 
 // router.post("/user-login", userLogin)
-//----------------------Password---------------------------
 
+
+//----------------------Password---------------------------
 // router.post("/change-password",authMiddleware, changePassword)
 // router.post("/forget-password", forgetPassword);
 // router.post("/reset-password", resetPassword);

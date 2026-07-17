@@ -31,63 +31,23 @@ export interface Requser extends Document {
 
 
 export interface User extends Document {
-
   name: string;
-
   email: string;
-
   roleId: Types.ObjectId | Role | string;
-
-  profileId?: Types.ObjectId;
-
-  phone?: string;
-
+  gender:string;
   status: number;
-
   password?: string;
-
   is_login: boolean;
-
   isDeleted: boolean;
-
-  zip_code?: string;
-
-  city?: string;
-
-  state?: string;
-
-  country?: string;
-
-  landmark?: string;
-
-  address?: string;
-
-  dob?: string;
-
-  gender?: string;
-
-  about?: string;
-
   token?: string;
-
   otp_token?: string;
-
   otp_attempts?: number;
-
   otp_verified?: boolean;
-
   emailStatus: "pending" | "failed" | "sent";
-
   socketId?: string | null;
-
-
   created_by?: Types.ObjectId | User;
-
   updated_by?: Types.ObjectId | User;
-
-
   created_at?: Date;
-
   updated_at?: Date;
 }
 
