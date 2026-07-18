@@ -54,7 +54,9 @@ import authMiddleware from "../middleware/authMiddleware";
 // import { createTrainingEnrollOrEnquiry, getTrainingEnquiries } from "../controllers/trainingEnquiry.controller";
 import multer from "multer";
 import { registerUser } from "../controllers/registerUser";
-import { createUserByAdmin, LoginForAdmin } from "../controllers/createUserByAdmin";
+import { createUserByAdmin, LoginForAdmin, signout } from "../controllers/createUserByAdmin";
+import { getAllUsers, getSingleUser, getUserByRole, userLogin } from "../controllers/user";
+import { changePassword,forgetPassword,resetPassword,verifyCode } from "../controllers/password";
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
 // import { createBlog, deleteBlogtwo, getBlogById, getBlogs, updateBlog } from "../controllers/blogtwo";
 // import { getEmailAccounts } from "../controllers/email"
@@ -78,12 +80,23 @@ const upload = multer({ storage: multer.memoryStorage() });
 router.post("/register-user", registerUser);
 router.post("/create-user", authMiddleware, createUserByAdmin);
 // router.post("/update-user", authMiddleware, updateUser);
-// router.post("/get-users", authMiddleware, getAllUsers);
-// router.post("/get-single-user", authMiddleware, getSingleUser);
+router.post("/get-users", authMiddleware, getAllUsers);
+router.post("/get-single-user", authMiddleware, getSingleUser);
 router.post("/admin-login", LoginForAdmin);
+router.post("/getalluserbyrole", authMiddleware, getUserByRole);
+router.post("/signout", signout);
+router.post("/user-login", userLogin)
 // router.post("/login", Login);
 // router.post("/delete-user", authMiddleware, deleteUser)
 // router.post("/logout", userLogout);
+
+
+
+// ----------------------Password---------------------------
+router.post("/change-password",authMiddleware, changePassword)
+router.post("/forget-password", forgetPassword);
+router.post("/reset-password", resetPassword);
+router.post("/verify-code", verifyCode);
 
 // ------------------role-----------------
 router.post("/create-role", authMiddleware, createRole);
@@ -143,7 +156,6 @@ router.post("/delete-permission", authMiddleware, deletePermission);
 //-----------------------student-----------------------------
 // router.post("/add-student", authMiddleware, addStudentToClass);
 // router.post("/delete-user", authMiddleware, deleteUserByRole);
-// router.post("/getallstudents", authMiddleware, getUserByRole);
 
 // router.post("/update-attendance", authMiddleware, updateAttendance);
 // router.post("/student-attendance-report", authMiddleware, getStudentMonthlyAttendance);
@@ -154,20 +166,14 @@ router.post("/delete-permission", authMiddleware, deletePermission);
 // router.post("/create-payment-plan", createPaymentPlan);
 // router.post("/create-payment-installment", payInstallment);
 
-// router.post("/user-login", userLogin)
 
 
-//----------------------Password---------------------------
-// router.post("/change-password",authMiddleware, changePassword)
-// router.post("/forget-password", forgetPassword);
-// router.post("/reset-password", resetPassword);
-// router.post("/verify-code", verifyCode);
+
 
 //--------------service------------------
 // router.post("/add-service", authMiddleware, addservice);
 // router.post("/update-service", authMiddleware, updateService); // Assuming the same controller handles both add and update for simplicity
 // router.post("/book-service", bookService);
-// router.post("/signout", signout);
 
 //--------------contact------------------
 // router.post("/add-contact", addContact);

@@ -18,16 +18,6 @@ export interface Requser extends Document {
   roleId: Types.ObjectId;
 }
 
-// export interface UserPermission extends Document {
-//   _id: Types.ObjectId;
-//   name: string;
-// };
-
-// export interface UserRole extends Document {
-//   _id: Types.ObjectId;
-//   name: string;
-//   permissions: UserPermission[];
-// };
 
 
 export interface User extends Document {
@@ -36,7 +26,7 @@ export interface User extends Document {
   roleId: Types.ObjectId | Role | string;
   gender:string;
   status: number;
-  password?: string;
+  password: string;
   is_login: boolean;
   isDeleted: boolean;
   token?: string;
@@ -478,45 +468,15 @@ export interface NotificationToken extends Document {
   updated_at: Date;
 }
 
-// export interface BannerFormType extends DocumentResult<BannerFormType>, Document {
-//   name: string;
-//   email: string;
-//   phone: string;
-//   emailStatus: "pending" | "failed" | "sent";
-//   subject: string;
-//   message: string;
-//   created_at: string;
-//   updated_at: string;
-// }
-// export interface LeadAssignmentHistoryModel extends DocumentResult<LeadAssignmentHistoryModel>, Document {
-//   leadId: Types.ObjectId;
-//   leadModel: "trainingenquiry" | "contactus" | "JobApplication" | "bookservice" | "bannerform";
+export interface IUserProfile extends Document {
+  userId: mongoose.Types.ObjectId;
 
-//   assignedUserId: Types.ObjectId;
-//   assignedBy: Types.ObjectId;
+  city: string;
+  state: string;
+  country: string;
+  address: string;
+  photo: string;
 
-//   leadStatus: "new" | "inprogress" | "followup" | "contacted" | "converted" | "lost";
-
-//   remarks?: string;
-//   followUpDate?: Date;
-
-//   actionType: "assigned" | "updated" | "reassigned";
-
-//   created_at?: string;
-//   updated_at?: string;
-
-//   updated_by?: Types.ObjectId;
-// }
-
-// export interface noticeType extends DocumentResult<noticeType>, Document {
-//   title:string,
-//   message:string,
-//   noticeType:string,
-//   visibleTo:string[],
-//   batchId: mongoose.Schema.Types.ObjectId,
-//   courseId: mongoose.Schema.Types.ObjectId,
-//   createdBy: mongoose.Schema.Types.ObjectId,
-//   startDate: Date,
-//   expiryDate: Date,
-//   status: number
-// }
+  createdAt: Date;
+  updatedAt: Date;
+}

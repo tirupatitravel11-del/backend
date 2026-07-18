@@ -9,7 +9,13 @@ const SECRET_KEY = process.env.DB_AUTH_SECRET;
 
 const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
+
     let newToken = ""
+         console.log("Auth middleware called");
+     console.log("Authorization:", req.headers.authorization);
+console.log("Session:", req.session);
+console.log("newToken:", newToken);
+console.log("SECRET_KEY:", SECRET_KEY);
     if (req.session.token) {
       newToken = req.session.token
       console.log("auth");

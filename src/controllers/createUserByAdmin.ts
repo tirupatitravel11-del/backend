@@ -188,3 +188,67 @@ const data = logedinuser.toObject();
     return res.status(500).json({ message: "Something went wrong : " + error.message });
   }
 };
+export const signout = async (req: Request, res: Response) => {
+  console.log("Signout called");
+  try {
+    const { userId } = req.body;
+    // const date = getisotime(DateTime);
+
+    // Session exist check
+    if (!req.session) {
+      res.status(400).json({ message: "No active session found" });
+      return;
+    }
+
+    // Agar tum login ke waqt userId session me save karoge तो यहीं काम आसान हो जाएगा
+    // login me add karo -> req.session.userId = user._id;
+    // const userId = (req.session as any).userId;
+    // console.log(userId, "userId");
+
+    console.log("Signing out userId:", userId);
+    if (userId) {
+      await userModel.findByIdAndUpdate(
+        userId,
+        { is_login: false, token: "", updated_by: userId },
+        { new: true }
+      );
+    }
+
+    // if (userId) {
+    //   await notificationTokenModel.findByIdAndUpdate(
+    //     userId,
+    //     { socketID:null, isSignin:false},
+    //     { new: true }
+    //   );
+    // }
+
+    // Destroy session from MongoStore
+    const sid = req.sessionID; // current sessionId
+    // console.log(sid, "sid");
+
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Error destroying session:", err);
+        res.status(500).json({ message: "Logout failed" });
+        return;
+      }
+
+      // force remove from store (safety net)
+      if (sid) {
+        req.sessionStore.destroy(sid, (err) => {
+          if (err) console.error("Error removing session from store:", err);
+        });
+      }
+
+      // Clear cookie also
+      res.clearCookie("connect.sid", {
+        path: "/", // same path as session
+      });
+
+      res.status(200).json({ message: "Logout successful!" });
+      return;
+    });
+  } catch (error: any) {
+    res.status(500).json({ message: "Something went wrong: " + error.message });
+  }
+};
