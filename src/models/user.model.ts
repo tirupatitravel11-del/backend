@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
-import { User } from "../../types/type";
+import { User } from "../types/type";
 
 
 const userSchema = new mongoose.Schema<User>(
   {
     name: {
       type: String,
+       required: true,
     },
 
     email: {
@@ -13,6 +14,11 @@ const userSchema = new mongoose.Schema<User>(
       required: true,
       unique: true,
     },
+  gender: {
+  type: String,
+  enum: ["male", "female", "transgender"],
+  required: true,
+},
 
     roleId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -22,6 +28,7 @@ const userSchema = new mongoose.Schema<User>(
 
     password: {
       type: String,
+       required: true,
     },
 
     is_login: {

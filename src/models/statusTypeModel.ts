@@ -1,6 +1,6 @@
 
 import mongoose from 'mongoose'
-import { StatusType } from '../../types/type';
+import { StatusType } from '../types/type';
 const statusTypeSchema = new mongoose.Schema<StatusType>({
     status_type:{
         type:String

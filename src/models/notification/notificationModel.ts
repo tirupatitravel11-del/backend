@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Notification } from "../../../types/type";
+import { Notification } from "../../types/type";
 
 
 const notificationItemSchema = new mongoose.Schema(

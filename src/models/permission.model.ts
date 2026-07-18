@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Permission } from "../../types/type";
+import { Permission } from "../types/type";
 
 const permissionSchema = new mongoose.Schema<Permission>(
   {
