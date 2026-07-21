@@ -13,6 +13,7 @@ import {
   getCounsellors,
   getRoleById,
   getRoles,
+  softDeleteRole,
   // getRoles,
 } from "../controllers/role";
 // import {
@@ -57,6 +58,8 @@ import { registerUser } from "../controllers/registerUser";
 import { createUserByAdmin, LoginForAdmin, signout } from "../controllers/createUserByAdmin";
 import { getAllUsers, getSingleUser, getUserByRole, userLogin } from "../controllers/user";
 import { changePassword,forgetPassword,resetPassword,verifyCode } from "../controllers/password";
+import { createVehicleType, deleteVehicleType, getAllVehicleTypes, getVehicleTypeById, restoreVehicleType, updateVehicleType } from "../controllers/vehicleType.controller";
+import { createVehicle, deleteVehicle, getAllVehicles, getVehicleById, updateVehicle } from "../controllers/vehicle.controller";
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
 // import { createBlog, deleteBlogtwo, getBlogById, getBlogs, updateBlog } from "../controllers/blogtwo";
 // import { getEmailAccounts } from "../controllers/email"
@@ -103,6 +106,7 @@ router.post("/create-role", authMiddleware, createRole);
 router.get("/get-all-role", authMiddleware, getRoles);
 router.post("/get-role-by-id/:id", authMiddleware, getRoleById);
 router.post("/delete-role", authMiddleware, deleteRole);
+router.post("/soft-delete-role", authMiddleware, softDeleteRole);
 router.post("/delete-role-permission", authMiddleware, deleteRolePermission);
 
 
@@ -111,6 +115,23 @@ router.post("/create-permission", authMiddleware, createPermission);
 router.get("/get-all-permission", authMiddleware, getAllPermission);
 router.post("/get-permission-by-id/:id", authMiddleware, getPermissionById);
 router.post("/delete-permission", authMiddleware, deletePermission);
+
+//---------------------vehicleType------------------
+
+router.post("/create-vehicle-type", createVehicleType);
+router.post("/get-all-vehicle-type", getAllVehicleTypes);
+router.get("/get-vehicle-type-by-id/:id", getVehicleTypeById);
+router.put("/update-vehicle-type/:id", updateVehicleType);
+router.delete("/delete-vehicle-type", deleteVehicleType);
+router.delete("/restore-vehicle-type", restoreVehicleType);
+
+//---------------------vehicle------------------
+router.post("/create-vehicle", createVehicle);
+router.get("/get-all-vehicle", getAllVehicles);
+router.get("/get-vehicle-by-id/:id", getVehicleById);
+router.put("/update-vehicle/:id", updateVehicle);
+router.delete("/delete-vehicle", deleteVehicle);
+
 
 //--------------------courses------------------
 // router.post("/create-update-course", authMiddleware, createOrUpdateCourse);

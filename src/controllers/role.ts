@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import roleModel from "../models/role.model";
 import mongoose from "mongoose";
 import userModel from "../models/user.model";
-
 export const createRole = async (
   req: Request,
   res: Response,
@@ -10,61 +9,86 @@ export const createRole = async (
 ) => {
   try {
     const { id, name, permissions } = req.body;
-    console.log("Permissions received:", permissions);  
+
     if (!name || !Array.isArray(permissions)) {
-      res.status(400).json({ error: "Name and permissions are required." });
-      return
+      return res.status(400).json({
+        success: false,
+        message: "Name and permissions are required.",
+      });
     }
 
+    // ================= UPDATE ROLE =================
     if (id) {
+      const existingRole = await roleModel.findOne({
+        _id: { $ne: id },
+        name,
+        isDeleted: false,
+      });
 
-      //  Update role if ID exists
-      const updatedRole = await roleModel.findByIdAndUpdate(
-        id,
-        {
-          $set: { name: name, updated_at: new Date().toISOString(), permissions: permissions  },
-          // $addToSet: { permissions: { $each: permissions } }, // adds only new values
-        },
-        { new: true }
-      );
-
-      if (!updatedRole) {
-        res.status(404).json({ error: "Role not found." });
-        return
+      if (existingRole) {
+        return res.status(409).json({
+          success: false,
+          message: "Role name already exists.",
+        });
       }
 
-      res.status(200).json({
+      const updatedRole = await roleModel.findOneAndUpdate(
+        { _id: id, isDeleted: false },
+        {
+          name,
+          permissions,
+          updated_by: req.user?._id, // Auth middleware
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      ).populate("permissions");
+
+      if (!updatedRole) {
+        return res.status(404).json({
+          success: false,
+          message: "Role not found.",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
         message: "Role updated successfully.",
         data: updatedRole,
       });
-      return
-    } else {
-      //  Create new role
-      const existingRole = await roleModel.findOne({ name });
-      if (existingRole) {
-        res.status(409).json({ error: "Role with this name already exists." });
-        return
-      }
-
-      const newRole = new roleModel({
-        name,
-        permissions,
-        created_at: new Date().toISOString(),
-      });
-
-      await newRole.save();
-
-      res.status(201).json({
-        message: "Role created successfully.",
-        data: newRole,
-      });
-      return
     }
+
+    // ================= CREATE ROLE =================
+    const existingRole = await roleModel.findOne({
+      name,
+      isDeleted: false,
+    });
+
+    if (existingRole) {
+      return res.status(409).json({
+        success: false,
+        message: "Role already exists.",
+      });
+    }
+
+    const newRole = await roleModel.create({
+      name,
+      permissions,
+      created_by: req.user?._id, // Auth middleware
+    });
+
+    const role = await roleModel
+      .findById(newRole._id)
+      .populate("permissions");
+
+    return res.status(201).json({
+      success: true,
+      message: "Role created successfully.",
+      data: role,
+    });
   } catch (error) {
-    console.error("Create/Update Role Error:", error);
-    res.status(500).json({ error: "Internal server error." });
     next(error);
-    return
   }
 };
 export const getRoles = async (
@@ -73,14 +97,19 @@ export const getRoles = async (
   next: NextFunction
 ) => {
   try {
-    const roles = await roleModel.find();
-    return res.status(200).json({ message: "roles fetch successfully.", data: roles });
-    
+    const roles = await roleModel
+      .find({ isDeleted: false })
+      .populate("permissions")
+      .sort({ created_at: -1 });
+
+    return res.status(200).json({
+      success: true,
+      message: "Roles fetched successfully.",
+      data: roles,
+    });
   } catch (error) {
-    console.error("fetch all Role  Error:", error);
-    res.status(500).json({ error: "Internal server error." });
+    console.error("Fetch Roles Error:", error);
     next(error);
-    return
   }
 };
 export const deleteRole = async (
@@ -113,6 +142,49 @@ export const deleteRole = async (
     res.status(500).json({ error: "Internal server error." });
     next(error);
     return
+  }
+};
+export const softDeleteRole = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Role ID is required.",
+      });
+    }
+
+    const role = await roleModel.findOne({
+      _id: id,
+      isDeleted: false,
+    });
+
+    if (!role) {
+      return res.status(404).json({
+        success: false,
+        message: "Role not found.",
+      });
+    }
+
+    role.isDeleted = true;
+    role.deleted_at = new Date();
+    role.deleted_by = req.user?._id; 
+
+    await role.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Role deleted successfully.",
+      data: role,
+    });
+  } catch (error) {
+    console.error("Delete Role Error:", error);
+    next(error);
   }
 };
 export const getRoleById = async (

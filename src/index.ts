@@ -141,7 +141,7 @@ if (process.env.SESSION_SECRET) {
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: true,
+      secure: false,
       httpOnly: true,
     //   sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,

@@ -25,19 +25,30 @@ const roleSchema = new mongoose.Schema<Role>(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+
+    deleted_at: {
+      type: Date,
+      default: null,
+    },
+
+    deleted_by: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
   },
   {
     timestamps: {
       createdAt: "created_at",
       updatedAt: "updated_at",
     },
-  }
+  },
 );
 
-
-const roleModel = mongoose.model<Role>(
-  "role",
-  roleSchema
-);
+const roleModel = mongoose.model<Role>("role", roleSchema);
 
 export default roleModel;

@@ -50,6 +50,12 @@ export interface Role extends Document {
   created_by?: Types.ObjectId | User;
 
   updated_by?: Types.ObjectId | User;
+  
+  isDeleted: boolean;
+
+  deleted_at?: Date | null;
+
+  deleted_by?: Types.ObjectId | User | null;
 
   created_at?: Date;
 
