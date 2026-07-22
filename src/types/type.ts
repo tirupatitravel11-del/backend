@@ -486,3 +486,12 @@ export interface IUserProfile extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IState extends Document {
+  name: string;
+  slug: string;
+  code: string;
+  image: string;
+  description: string;
+  status: boolean;
+}

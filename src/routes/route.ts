@@ -60,6 +60,7 @@ import { getAllUsers, getSingleUser, getUserByRole, userLogin } from "../control
 import { changePassword,forgetPassword,resetPassword,verifyCode } from "../controllers/password";
 import { createVehicleType, deleteVehicleType, getAllVehicleTypes, getVehicleTypeById, restoreVehicleType, updateVehicleType } from "../controllers/vehicleType.controller";
 import { createVehicle, deleteVehicle, getAllVehicles, getVehicleById, updateVehicle } from "../controllers/vehicle.controller";
+import { createUpdateState, deleteState, getAllState, getSingleState } from "../controllers/state/state.controller";
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
 // import { createBlog, deleteBlogtwo, getBlogById, getBlogs, updateBlog } from "../controllers/blogtwo";
 // import { getEmailAccounts } from "../controllers/email"
@@ -132,7 +133,11 @@ router.get("/get-vehicle-by-id/:id", getVehicleById);
 router.put("/update-vehicle/:id", updateVehicle);
 router.delete("/delete-vehicle", deleteVehicle);
 
-
+//---------------------states------------------
+router.post("/create-update-state",createUpdateState);
+router.post("/all-state",getAllState);
+router.post("/single-state",getSingleState);
+router.post("/delete-state",deleteState);
 //--------------------courses------------------
 // router.post("/create-update-course", authMiddleware, createOrUpdateCourse);
 // router.get("/get-all-courses-by-maincourse", getAllCoursesByMainCourse);
