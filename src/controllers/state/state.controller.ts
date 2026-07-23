@@ -105,94 +105,75 @@ export const createUpdateState = async (
 
   }
 };
-
 export const getAllState = async (
   req: Request,
   res: Response
 ) => {
-
   try {
-
     const {
       page = 1,
       limit = 10,
       search = "",
       isActive,
+      isDeleted,
     } = req.body;
 
-    const skip =
-      (Number(page) - 1) * Number(limit);
+    const skip = (Number(page) - 1) * Number(limit);
 
-    const filter: any = {
-      isDeleted: false,
-    };
+    const filter: any = {};
 
+    // Optional Filters
     if (typeof isActive === "boolean") {
       filter.isActive = isActive;
     }
 
+    if (typeof isDeleted === "boolean") {
+      filter.isDeleted = isDeleted;
+    }
+
     if (search) {
-
       filter.$or = [
-
         {
           name: {
             $regex: search,
             $options: "i",
           },
         },
-
         {
           code: {
             $regex: search,
             $options: "i",
           },
         },
-
       ];
-
     }
 
     const states = await StateModel.find(filter)
-      .sort({
-        created_at: -1,
-      })
+      .sort({ created_at: -1 })
       .skip(skip)
       .limit(Number(limit));
 
-    const total =
-      await StateModel.countDocuments(filter);
+    const total = await StateModel.countDocuments(filter);
 
     return res.status(200).json({
-
       success: true,
-
-      message:
-        "States fetched successfully.",
-
+      message: "States fetched successfully.",
       data: states,
-
       pagination: {
         total,
         page: Number(page),
         limit: Number(limit),
-        totalPages: Math.ceil(
-          total / Number(limit)
-        ),
+        totalPages: Math.ceil(total / Number(limit)),
       },
-
     });
-
   } catch (error) {
-
     console.log(error);
 
     return res.status(500).json({
-      error: "Internal server error.",
+      success: false,
+      message: "Internal server error.",
     });
-
   }
-
 };
 
 export const getSingleState = async (
