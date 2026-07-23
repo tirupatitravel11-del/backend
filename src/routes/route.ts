@@ -61,6 +61,7 @@ import { changePassword,forgetPassword,resetPassword,verifyCode } from "../contr
 import { createVehicleType, deleteVehicleType, getAllVehicleTypes, getVehicleTypeById, restoreVehicleType, updateVehicleType } from "../controllers/vehicleType.controller";
 import { createVehicle, deleteVehicle, getAllVehicles, getVehicleById, updateVehicle } from "../controllers/vehicle.controller";
 import { changeStateStatus, createUpdateState, deleteState, getAllState, getSingleState, getStateDropdown, restoreState } from "../controllers/state/state.controller";
+import { changeCityStatus, createUpdateCity, deleteCity, getAllCity, getCityDropdown, getSingleCity, restoreCity } from "../controllers/city/city.controller";
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
 // import { createBlog, deleteBlogtwo, getBlogById, getBlogs, updateBlog } from "../controllers/blogtwo";
 // import { getEmailAccounts } from "../controllers/email"
@@ -135,12 +136,22 @@ router.delete("/delete-vehicle", deleteVehicle);
 
 //---------------------states------------------
 router.post("/create-update-state", authMiddleware, createUpdateState);
-router.post("/all-state", authMiddleware, getAllState);
+router.post("/all-state", getAllState);
 router.post("/single-state", authMiddleware, getSingleState);
 router.post("/delete-state", authMiddleware, deleteState);
 router.post("/restore-state", authMiddleware, restoreState);
 router.post("/change-status-state", authMiddleware, changeStateStatus);
 router.post("/dropdown-state", getStateDropdown);
+
+
+//--------------------city------------------
+router.post("/create-update-city", authMiddleware, createUpdateCity);
+router.post("/all-city", getAllCity);
+router.post("/single-city", authMiddleware, getSingleCity);
+router.post("/delete-city", authMiddleware, deleteCity);
+router.post("/restore-city", authMiddleware, restoreCity);
+router.post("/change-status-city", authMiddleware, changeCityStatus);
+router.post("/dropdown-city",  getCityDropdown);
 
 //--------------------courses------------------
 // router.post("/create-update-course", authMiddleware, createOrUpdateCourse);
