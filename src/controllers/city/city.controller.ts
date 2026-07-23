@@ -1,12 +1,9 @@
 import { Request, Response } from "express";
 import slugify from "slugify";
-import CityModel from "../../models/city/city.model"
+import CityModel from "../../models/city/city.model";
 import StateModel from "../../models//state/state.model";
 
-export const createUpdateCity = async (
-  req: Request,
-  res: Response
-) => {
+export const createUpdateCity = async (req: Request, res: Response) => {
   try {
     const {
       id,
@@ -17,6 +14,7 @@ export const createUpdateCity = async (
       isPopular = false,
       sortOrder = 0,
     } = req.body;
+    console.log(req.body);
 
     const userId = req.user?._id;
 
@@ -144,10 +142,7 @@ export const createUpdateCity = async (
   }
 };
 
-export const getAllCity = async (
-  req: Request,
-  res: Response
-) => {
+export const getAllCity = async (req: Request, res: Response) => {
   try {
     const {
       page = 1,
@@ -216,10 +211,7 @@ export const getAllCity = async (
   }
 };
 
-export const getSingleCity = async (
-  req: Request,
-  res: Response
-) => {
+export const getSingleCity = async (req: Request, res: Response) => {
   try {
     const { id } = req.body;
 
@@ -230,8 +222,7 @@ export const getSingleCity = async (
       });
     }
 
-    const city = await CityModel.findById(id)
-      .populate("state_id", "name code");
+    const city = await CityModel.findById(id).populate("state_id", "name code");
 
     if (!city) {
       return res.status(404).json({
@@ -255,10 +246,7 @@ export const getSingleCity = async (
   }
 };
 
-export const deleteCity = async (
-  req: Request,
-  res: Response
-) => {
+export const deleteCity = async (req: Request, res: Response) => {
   try {
     const { id } = req.body;
 
@@ -280,7 +268,7 @@ export const deleteCity = async (
       },
       {
         new: true,
-      }
+      },
     );
 
     if (!city) {
@@ -305,11 +293,7 @@ export const deleteCity = async (
   }
 };
 
-
-export const restoreCity = async (
-  req: Request,
-  res: Response
-) => {
+export const restoreCity = async (req: Request, res: Response) => {
   try {
     const { id } = req.body;
 
@@ -324,7 +308,7 @@ export const restoreCity = async (
       },
       {
         new: true,
-      }
+      },
     );
 
     if (!city) {
@@ -349,11 +333,7 @@ export const restoreCity = async (
   }
 };
 
-
-export const changeCityStatus = async (
-  req: Request,
-  res: Response
-) => {
+export const changeCityStatus = async (req: Request, res: Response) => {
   try {
     const { id, isActive } = req.body;
 
@@ -374,7 +354,7 @@ export const changeCityStatus = async (
       },
       {
         new: true,
-      }
+      },
     );
 
     if (!city) {
@@ -399,11 +379,7 @@ export const changeCityStatus = async (
   }
 };
 
-
-export const getCityDropdown = async (
-  req: Request,
-  res: Response
-) => {
+export const getCityDropdown = async (req: Request, res: Response) => {
   try {
     const { state_id } = req.body;
 
