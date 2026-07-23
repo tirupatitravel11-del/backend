@@ -1,54 +1,127 @@
 import { Request, Response } from "express";
-import VehicleType from "../models/vehicleType.model";
+import slugify from "slugify";
+import CabTypeModel from "../models/vehicleType.model";
 
+export const createUpdateCabType = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const {
+      id,
+      name,
+      description = "",
+      image = "",
+      tags = [],
+      sortOrder = 0,
+      isPopular = false,
+    } = req.body;
 
-// Create Vehicle Type
-export const createVehicleType = async (req: Request, res: Response) => {
-    try {
+    const userId = req.user?._id;
 
-        const { typeName, description } = req.body;
-
-        if (!typeName) {
-            return res.status(400).json({
-                success: false,
-                message: "Vehicle type name is required"
-            });
-        }
-
-        const alreadyExists = await VehicleType.findOne({
-            typeName,
-            isDeleted: false
-        });
-
-        if (alreadyExists) {
-            return res.status(400).json({
-                success: false,
-                message: "Vehicle type already exists"
-            });
-        }
-
-        const vehicleType = await VehicleType.create({
-            typeName,
-            description
-        });
-
-        return res.status(201).json({
-            success: true,
-            message: "Vehicle type created successfully",
-            data: vehicleType
-        });
-
-    } catch (error: any) {
-        return res.status(500).json({
-            success: false,
-            message: error.message
-        });
+    if (!name) {
+      return res.status(400).json({
+        success: false,
+        message: "Cab type name is required.",
+      });
     }
+
+    const slug = slugify(name, {
+      lower: true,
+      strict: true,
+      trim: true,
+    });
+
+    // ================= UPDATE =================
+
+    if (id) {
+      const cabType = await CabTypeModel.findOne({
+        _id: id,
+        isDeleted: false,
+      });
+
+      if (!cabType) {
+        return res.status(404).json({
+          success: false,
+          message: "Cab type not found.",
+        });
+      }
+
+      const duplicate = await CabTypeModel.findOne({
+        slug,
+        isDeleted: false,
+        _id: {
+          $ne: id,
+        },
+      });
+
+      if (duplicate) {
+        return res.status(400).json({
+          success: false,
+          message: "Cab type already exists.",
+        });
+      }
+
+      cabType.name = name;
+      cabType.slug = slug;
+      cabType.description = description;
+      cabType.image = image;
+      cabType.tags = tags;
+      cabType.sortOrder = sortOrder;
+      cabType.isPopular = isPopular;
+      cabType.updated_by = userId;
+
+      await cabType.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Cab type updated successfully.",
+        data: cabType,
+      });
+    }
+
+    // ================= CREATE =================
+
+    const duplicate = await CabTypeModel.findOne({
+      slug,
+      isDeleted: false,
+    });
+
+    if (duplicate) {
+      return res.status(400).json({
+        success: false,
+        message: "Cab type already exists.",
+      });
+    }
+
+    const cabType = await CabTypeModel.create({
+      name,
+      slug,
+      description,
+      image,
+      tags,
+      sortOrder,
+      isPopular,
+      created_by: userId,
+      updated_by: userId,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Cab type created successfully.",
+      data: cabType,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
 };
 
-
-// Get All
-export const getAllVehicleTypes = async (
+export const getAllCabType = async (
   req: Request,
   res: Response
 ) => {
@@ -57,237 +130,283 @@ export const getAllVehicleTypes = async (
       page = 1,
       limit = 10,
       search = "",
-      order = { col: "created_at", order: -1 },
+      isActive,
+      isDeleted,
     } = req.body;
 
-    // Pagination
-    const pageNum = Number(page) || 1;
-    const limitNum = Number(limit) || 10;
-    const skip = (pageNum - 1) * limitNum;
+    const filter: any = {};
 
-    // Sorting
-    let sortObj: any = { created_at: -1 };
-
-    if (order?.col && order?.order !== undefined) {
-      sortObj = {
-        [order.col]: Number(order.order) === 1 ? 1 : -1,
-      };
+    if (typeof isActive === "boolean") {
+      filter.isActive = isActive;
     }
 
-    // Filter
-    const filter: any = {
-      isDeleted: false,
-    };
-
-    // Search
-    if (search && search.trim() !== "") {
-      filter.name = {
-        $regex: search.trim(),
-        $options: "i",
-      };
+    if (typeof isDeleted === "boolean") {
+      filter.isDeleted = isDeleted;
     }
 
-    // Fetch Data
-    const data = await VehicleType.find(filter)
-      .sort(sortObj)
-      .skip(skip)
-      .limit(limitNum);
+    if (search) {
+      filter.$or = [
+        {
+          name: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          description: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          tags: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+      ];
+    }
 
-    // Total Count
-    const count = await VehicleType.countDocuments(filter);
+    const total = await CabTypeModel.countDocuments(filter);
+
+    const cabTypes = await CabTypeModel.find(filter)
+      .sort({
+        sortOrder: 1,
+        created_at: -1,
+      })
+      .skip((page - 1) * limit)
+      .limit(limit);
 
     return res.status(200).json({
       success: true,
-      message: "Vehicle types fetched successfully.",
-      data,
-      count,
-      page: pageNum,
-      limit: limitNum,
-      totalPages: Math.ceil(count / limitNum),
+      message: "Cab type list fetched successfully.",
+      data: cabTypes,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
     });
-  } catch (error: any) {
-    console.error("Get Vehicle Types Error:", error);
+  } catch (error) {
+    console.log(error);
 
     return res.status(500).json({
       success: false,
-      message: "Internal Server Error",
-      error: error.message,
+      message: "Internal server error.",
     });
   }
 };
 
-// Get Single
-export const getVehicleTypeById = async (req: Request, res: Response) => {
+export const getSingleCabType = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { id } = req.body;
 
-    try {
-
-        const { id } = req.params;
-
-        const data = await VehicleType.findOne({
-            _id: id,
-            isDeleted: false
-        });
-
-        if (!data) {
-            return res.status(404).json({
-                success: false,
-                message: "Vehicle type not found"
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            data
-        });
-
-    } catch (error: any) {
-
-        return res.status(500).json({
-            success: false,
-            message: error.message
-        });
-
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Cab type id is required.",
+      });
     }
+
+    const cabType = await CabTypeModel.findById(id);
+
+    if (!cabType) {
+      return res.status(404).json({
+        success: false,
+        message: "Cab type not found.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Cab type fetched successfully.",
+      data: cabType,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
 };
 
 
-// Update
-export const updateVehicleType = async (req: Request, res: Response) => {
+export const deleteCabType = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { id } = req.body;
 
-    try {
-
-        const { id } = req.params;
-
-        const { typeName, description, isActive } = req.body;
-
-        const exists = await VehicleType.findOne({
-            _id: id,
-            isDeleted: false
-        });
-
-        if (!exists) {
-            return res.status(404).json({
-                success: false,
-                message: "Vehicle type not found"
-            });
-        }
-
-        if (typeName) {
-
-            const duplicate = await VehicleType.findOne({
-                _id: { $ne: id },
-                typeName,
-                isDeleted: false
-            });
-
-            if (duplicate) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Vehicle type already exists"
-                });
-            }
-
-        }
-
-        const updated = await VehicleType.findByIdAndUpdate(
-            id,
-            {
-                typeName,
-                description,
-                isActive
-            },
-            {
-                new: true
-            }
-        );
-
-        return res.status(200).json({
-            success: true,
-            message: "Vehicle type updated successfully",
-            data: updated
-        });
-
-    } catch (error: any) {
-
-        return res.status(500).json({
-            success: false,
-            message: error.message
-        });
-
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Cab type id is required.",
+      });
     }
+
+    const cabType = await CabTypeModel.findOne({
+      _id: id,
+      isDeleted: false,
+    });
+
+    if (!cabType) {
+      return res.status(404).json({
+        success: false,
+        message: "Cab type not found.",
+      });
+    }
+
+    cabType.isDeleted = true;
+    cabType.updated_by = req.user?._id;
+
+    await cabType.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Cab type deleted successfully.",
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
 };
 
+export const restoreCabType = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { id } = req.body;
 
-// Delete (Soft Delete)
-export const deleteVehicleType = async (req: Request, res: Response) => {
-
-    try {
-
-        const { id } = req.body;
-
-        const exists = await VehicleType.findOne({
-            _id: id,
-            isDeleted: false
-        });
-
-        if (!exists) {
-            return res.status(404).json({
-                success: false,
-                message: "Vehicle type not found"
-            });
-        }
-
-        await VehicleType.findByIdAndUpdate(id, {
-            isDeleted: true
-        });
-
-        return res.status(200).json({
-            success: true,
-            message: "Vehicle type deleted successfully"
-        });
-
-    } catch (error: any) {
-
-        return res.status(500).json({
-            success: false,
-            message: error.message
-        });
-
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Cab type id is required.",
+      });
     }
+
+    const cabType = await CabTypeModel.findOne({
+      _id: id,
+      isDeleted: true,
+    });
+
+    if (!cabType) {
+      return res.status(404).json({
+        success: false,
+        message: "Cab type not found.",
+      });
+    }
+
+    cabType.isDeleted = false;
+    cabType.updated_by = req.user?._id;
+
+    await cabType.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Cab type restored successfully.",
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
 };
-export const restoreVehicleType = async (req: Request, res: Response) => {
 
-    try {
+export const changeCabTypeStatus = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { id, isActive } = req.body;
 
-        const { id } = req.body;
-
-        const exists = await VehicleType.findOne({
-            _id: id,
-            isDeleted: true
-        });
-
-        if (!exists) {
-            return res.status(404).json({
-                success: false,
-                message: "Vehicle type not found"
-            });
-        }
-
-        await VehicleType.findByIdAndUpdate(id, {
-            isDeleted: false
-        });
-
-        return res.status(200).json({
-            success: true,
-            message: "Vehicle type restroe successfully"
-        });
-
-    } catch (error: any) {
-
-        return res.status(500).json({
-            success: false,
-            message: error.message
-        });
-
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Cab type id is required.",
+      });
     }
+
+    if (typeof isActive !== "boolean") {
+      return res.status(400).json({
+        success: false,
+        message: "isActive must be boolean.",
+      });
+    }
+
+    const cabType = await CabTypeModel.findOne({
+      _id: id,
+      isDeleted: false,
+    });
+
+    if (!cabType) {
+      return res.status(404).json({
+        success: false,
+        message: "Cab type not found.",
+      });
+    }
+
+    cabType.isActive = isActive;
+    cabType.updated_by = req.user?._id;
+
+    await cabType.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Cab type ${
+        isActive ? "activated" : "deactivated"
+      } successfully.`,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+};
+
+export const getCabTypeDropdown = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const cabTypes = await CabTypeModel.find({
+      isActive: true,
+      isDeleted: false,
+    })
+      .select("_id name slug")
+      .sort({
+        sortOrder: 1,
+        name: 1,
+      });
+
+    return res.status(200).json({
+      success: true,
+      message: "Cab type dropdown fetched successfully.",
+      data: cabTypes,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
 };
