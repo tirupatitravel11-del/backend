@@ -58,7 +58,7 @@ import { registerUser } from "../controllers/registerUser";
 import { createUserByAdmin, LoginForAdmin, signout } from "../controllers/createUserByAdmin";
 import { getAllUsers, getSingleUser, getUserByRole, userLogin } from "../controllers/user";
 import { changePassword,forgetPassword,resetPassword,verifyCode } from "../controllers/password";
-import { createVehicleType, deleteVehicleType, getAllVehicleTypes, getVehicleTypeById, restoreVehicleType, updateVehicleType } from "../controllers/vehicleType.controller";
+import { changeCabTypeStatus, createUpdateCabType, deleteCabType, getAllCabType, getCabTypeDropdown, getSingleCabType, restoreCabType } from "../controllers/vehicleType.controller";
 import { createVehicle, deleteVehicle, getAllVehicles, getVehicleById, updateVehicle } from "../controllers/vehicle.controller";
 import { changeStateStatus, createUpdateState, deleteState, getAllState, getSingleState, getStateDropdown, restoreState } from "../controllers/state/state.controller";
 import { changeCityStatus, createUpdateCity, deleteCity, getAllCity, getCityDropdown, getSingleCity, restoreCity } from "../controllers/city/city.controller";
@@ -118,14 +118,15 @@ router.get("/get-all-permission", authMiddleware, getAllPermission);
 router.post("/get-permission-by-id/:id", authMiddleware, getPermissionById);
 router.post("/delete-permission", authMiddleware, deletePermission);
 
-//---------------------vehicleType------------------
+//---------------------cabType------------------
 
-router.post("/create-vehicle-type", createVehicleType);
-router.post("/get-all-vehicle-type", getAllVehicleTypes);
-router.get("/get-vehicle-type-by-id/:id", getVehicleTypeById);
-router.put("/update-vehicle-type/:id", updateVehicleType);
-router.delete("/delete-vehicle-type", deleteVehicleType);
-router.delete("/restore-vehicle-type", restoreVehicleType);
+router.post("/create-update-cab-type",authMiddleware, createUpdateCabType);
+router.post("/all-cab-type", getAllCabType);
+router.post("/single-cab-type", getSingleCabType);
+router.post("/delete-cab-type",authMiddleware, deleteCabType);
+router.post("/restore-cab-type",authMiddleware, restoreCabType);
+router.post("/change-status-cab-type",authMiddleware, changeCabTypeStatus);
+router.post("/dropdown-cab-type", getCabTypeDropdown);
 
 //---------------------vehicle------------------
 router.post("/create-vehicle", createVehicle);
