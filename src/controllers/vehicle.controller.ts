@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import slugify from "slugify";
 import VehicleModel from "../models/vehicle.model";
-import CabTypeModel from "../models/vehicle.model";
+import CabTypeModel from "../models/vehicleType.model";
 
 export const createUpdateVehicle = async (
   req: Request,
