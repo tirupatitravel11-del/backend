@@ -161,13 +161,13 @@ router.post("/dropdown-city",  getCityDropdown);
 
 //--------------------cabRoute------------------
 
-router.post("/create-update",authMiddleware, createUpdateRoute);
-router.post("/all",getAllRoute);
-router.post("/single", getSingleRoute);
-router.post("/delete",authMiddleware, deleteRoute);
-router.post("/restore",authMiddleware, restoreRoute);
-router.post("/change-status",authMiddleware,changeRouteStatus);
-router.post("/dropdown", getRouteDropdown);
+router.post("/create-update-route",authMiddleware, createUpdateRoute);
+router.post("/all-route",getAllRoute);
+router.post("/single-route", getSingleRoute);
+router.post("/delete-route",authMiddleware, deleteRoute);
+router.post("/restore-route",authMiddleware, restoreRoute);
+router.post("/change-status-route",authMiddleware,changeRouteStatus);
+router.post("/dropdown-route", getRouteDropdown);
 
 
 
