@@ -62,6 +62,7 @@ import { changeCabTypeStatus, createUpdateCabType, deleteCabType, getAllCabType,
 import { changeVehicleStatus, createUpdateVehicle, deleteVehicle, getAllVehicle, getSingleVehicle, getVehicleDropdown, restoreVehicle,  } from "../controllers/vehicle.controller";
 import { changeStateStatus, createUpdateState, deleteState, getAllState, getSingleState, getStateDropdown, restoreState } from "../controllers/state/state.controller";
 import { changeCityStatus, createUpdateCity, deleteCity, getAllCity, getCityDropdown, getSingleCity, restoreCity } from "../controllers/city/city.controller";
+import { changeRouteStatus, createUpdateRoute, deleteRoute, getAllRoute, getRouteDropdown, getSingleRoute, restoreRoute } from "../controllers/route/route.controller";
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
 // import { createBlog, deleteBlogtwo, getBlogById, getBlogs, updateBlog } from "../controllers/blogtwo";
 // import { getEmailAccounts } from "../controllers/email"
@@ -130,7 +131,7 @@ router.post("/dropdown-cab-type", getCabTypeDropdown);
 
 //---------------------vehicle------------------
 router.post("/create-update-vehicle", authMiddleware,createUpdateVehicle);
-router.post("/all-vehicle",authMiddleware, getAllVehicle);
+router.post("/all-vehicle", getAllVehicle);
 router.post("/single-vehicle", getSingleVehicle);
 router.post("/delete-vehicle",authMiddleware, deleteVehicle);
 router.post("/restore-vehicle",authMiddleware, restoreVehicle);
@@ -158,8 +159,15 @@ router.post("/change-status-city", authMiddleware, changeCityStatus);
 router.post("/dropdown-city",  getCityDropdown);
 
 
+//--------------------cabRoute------------------
 
-
+router.post("/create-update",authMiddleware, createUpdateRoute);
+router.post("/all",getAllRoute);
+router.post("/single", getSingleRoute);
+router.post("/delete",authMiddleware, deleteRoute);
+router.post("/restore",authMiddleware, restoreRoute);
+router.post("/change-status",authMiddleware,changeRouteStatus);
+router.post("/dropdown", getRouteDropdown);
 
 
 
