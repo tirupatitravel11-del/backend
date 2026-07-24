@@ -59,7 +59,7 @@ import { createUserByAdmin, LoginForAdmin, signout } from "../controllers/create
 import { getAllUsers, getSingleUser, getUserByRole, userLogin } from "../controllers/user";
 import { changePassword,forgetPassword,resetPassword,verifyCode } from "../controllers/password";
 import { changeCabTypeStatus, createUpdateCabType, deleteCabType, getAllCabType, getCabTypeDropdown, getSingleCabType, restoreCabType } from "../controllers/vehicleType.controller";
-import { createVehicle, deleteVehicle, getAllVehicles, getVehicleById, updateVehicle } from "../controllers/vehicle.controller";
+import { changeVehicleStatus, createUpdateVehicle, deleteVehicle, getAllVehicle, getSingleVehicle, getVehicleDropdown, restoreVehicle,  } from "../controllers/vehicle.controller";
 import { changeStateStatus, createUpdateState, deleteState, getAllState, getSingleState, getStateDropdown, restoreState } from "../controllers/state/state.controller";
 import { changeCityStatus, createUpdateCity, deleteCity, getAllCity, getCityDropdown, getSingleCity, restoreCity } from "../controllers/city/city.controller";
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
@@ -129,11 +129,14 @@ router.post("/change-status-cab-type",authMiddleware, changeCabTypeStatus);
 router.post("/dropdown-cab-type", getCabTypeDropdown);
 
 //---------------------vehicle------------------
-router.post("/create-vehicle", createVehicle);
-router.get("/get-all-vehicle", getAllVehicles);
-router.get("/get-vehicle-by-id/:id", getVehicleById);
-router.put("/update-vehicle/:id", updateVehicle);
-router.delete("/delete-vehicle", deleteVehicle);
+router.post("/create-update-vehicle", authMiddleware,createUpdateVehicle);
+router.post("/all-vehicle",authMiddleware, getAllVehicle);
+router.post("/single-vehicle", getSingleVehicle);
+router.post("/delete-vehicle",authMiddleware, deleteVehicle);
+router.post("/restore-vehicle",authMiddleware, restoreVehicle);
+router.post("/change-status-vehicle", authMiddleware,changeVehicleStatus);
+router.post("/dropdown-vehicle", getVehicleDropdown);
+
 
 //---------------------states------------------
 router.post("/create-update-state", authMiddleware, createUpdateState);
@@ -154,85 +157,15 @@ router.post("/restore-city", authMiddleware, restoreCity);
 router.post("/change-status-city", authMiddleware, changeCityStatus);
 router.post("/dropdown-city",  getCityDropdown);
 
-//--------------------courses------------------
-// router.post("/create-update-course", authMiddleware, createOrUpdateCourse);
-// router.get("/get-all-courses-by-maincourse", getAllCoursesByMainCourse);
-// router.post("/get-all-course", getAllCourses);
-// router.post("/get-single-course", getSingleCourse);
-// router.post("/get-courses", authMiddleware, getAllCoursesDropdown);
-// router.post("/delete-course", authMiddleware, deleteCourse);
-// router.post("/restore-course", authMiddleware, restoreCourse);
-// router.post("/create-update-main-course", authMiddleware, createOrUpdateMainCourse);
-// router.post("/get-all-course-titles", authMiddleware, getAllCourseTitles);
-// router.post("/get-main-course-titles", authMiddleware, getMainCourseTitles);
-// router.post("/delete-main-course-title", authMiddleware, deleteMainCourseTitles);
-// router.post("/restore-main-course-title", authMiddleware, restoreMainCourseTitles);
-
-//--------------------course modules-------------------
-// router.post("/create-course-module", authMiddleware, createTrainingCourseModule);
-// router.post("/update-course-module", authMiddleware, updateTrainingCourseModule);
-// router.post("/get-course-modules", authMiddleware, getAllTrainingCourseModules);
-// router.post("/get-course-modules-by-id", getTrainingCourseModuleById);
-// router.post("/get-course-modules-by-id-admin", getTrainingCourseModuleByIdadmin);
-
-// router.post("/delete-course-module", authMiddleware, deleteTrainingCourseModule);
-// router.post("/restore-course-module", authMiddleware, restoreTrainingCourseModule);
-// router.post("/create-bluk-modules", bulkCreateModules)
-// router.post("/settings", authMiddleware, globalSettings)
-
-//--------------------batches------------------
-// router.post("/create-update-batch", authMiddleware, createOrUpdateBatch);
-// router.post("/get-batches", authMiddleware, getBatches);
-// router.post("/get-all-batches", authMiddleware, getAllBatches);
-// router.post("/get-single-batch", authMiddleware, getSingleBatch);
-// router.post("/delete-batch", authMiddleware, deleteBatch);
-// router.post("/restore-batch", authMiddleware, restoreBatch);
-// router.post("/assign-instructor", authMiddleware, assignInstructorToBatch);
-
-//--------------------enrollment------------------
-// router.post("/create-update-enrollment", authMiddleware, studentEnrollment);
-// router.post("/get-enrolled-students", authMiddleware, getEnrolledStudents);
-// router.post("/delete-enrollment", authMiddleware, deleteStudentEnrollment);
-
-
-//-----------------------student-----------------------------
-// router.post("/add-student", authMiddleware, addStudentToClass);
-// router.post("/delete-user", authMiddleware, deleteUserByRole);
-
-// router.post("/update-attendance", authMiddleware, updateAttendance);
-// router.post("/student-attendance-report", authMiddleware, getStudentMonthlyAttendance);
-// router.post("/export/excel", authMiddleware, exportAttendanceExcel);
-
-
-//-----------user login-------------------
-// router.post("/create-payment-plan", createPaymentPlan);
-// router.post("/create-payment-installment", payInstallment);
 
 
 
 
 
-//--------------service------------------
-// router.post("/add-service", authMiddleware, addservice);
-// router.post("/update-service", authMiddleware, updateService); // Assuming the same controller handles both add and update for simplicity
-// router.post("/book-service", bookService);
-
-//--------------contact------------------
-// router.post("/add-contact", addContact);
-// router.post("/apply", uploadResume.single("resume"), addJobApplication);
-
-//--------------activity------------------
-// router.post("/activity-track", trackActivity);
-// router.get("/get-all-activity", getAllActivities);
-// router.post("/get-user-activity", getUserActivities);       // userId in body
-// router.delete("/delete-single-activity", deleteActivity);            // id in body
-// router.delete("/delete-single-user-all-activity", deleteUserActivities);
 
 
-//----------training enquiry----------------
-// router.post("/training-enquiry-enroll", createTrainingEnrollOrEnquiry);
-// router.get("/get-training-enquiries", authMiddleware, getTrainingEnquiries);
-// router.post("/delete-training-enquiry", authMiddleware, deleteTrainingEnquiry);
+
+
 
 //------------------upload images---------------------
 // router.post("/upload-file", authMiddleware, upload.single("file"), uploadToR2);
@@ -251,46 +184,7 @@ router.post("/dropdown-city",  getCityDropdown);
 // router.post("/get-all-blog-admin", authMiddleware, getAllBlogsAdmin)
 // router.post("/get-all-blogs", getAllBlogs)
 
-//------------------------leads------------------------
 
-// router.post("/get-all-training-leads-admin", authMiddleware, getLeadsbyLeadModel);
-// router.post("/get-all-training-leads-by-id", authMiddleware, getTrainingLeadsById);
-// router.post("/get-all-contactus-leads-admin", authMiddleware, getContactUsLeads);
-// router.post("/get-all-services-leads-admin", authMiddleware, getServicesLeads);
-// router.post("/get-all-job-leads-admin", authMiddleware, getJobApplicationLeads);
-// router.post("/get-all-banner-form-leads-admin", authMiddleware, getBannerFormLeads);
-
-// router.post("/assign-leads", authMiddleware, assignLeads);
-// router.post("/get-leads-by-id", authMiddleware, getLeadsById);
-// router.post("/lead-status", authMiddleware, updateLeadStatus);
-// router.post("/get-counsellors", authMiddleware, getCounsellors);
-// router.post("/lead-history", authMiddleware, getLeadHistory);
-
-// router.put("/editlead/:id", authMiddleware, editLead);
-// router.delete("/deletelead/:id", authMiddleware, deleteLead);
-
-
-
-//------------------------flashAnnouncement------------------------
-
-// router.post("/create-update-flash", createOrUpdateFlash)
-// router.post("/get-all-flash", getAllFlashAdmin)
-// router.get("/get-all-flash-user", getAllFlashUser)
-// router.post("/delete-flash", deleteFlash);
-// router.post("/restore-flash", restoreFlash);
-// router.post("/publish-flash", publishFlash);
-// router.post("/unpublish-flash", unpublishFlash);
-
-//--------------------attendance--------------------------------
-// router.post("/mark-student-attendance", authMiddleware, markStudentAttendance);
-// router.post("/get-batch-students", authMiddleware, getBatchStudents);
-// router.post("/get-attendance-by-date", authMiddleware, getAttendanceByDate);
-// router.post("/get-employees", authMiddleware, getEmployees);
-// router.post("/mark-employee-attendance", authMiddleware, markEmployeeAttendance);
-// router.post("/get-emp-attendance-by-date", authMiddleware, getEmpAttendanceByDate);
-// router.post("/get-student-attendance-report", authMiddleware, getStudentAttendanceReport);
-// router.post("/get-emp-attendance-report", authMiddleware, getEmployeeAttendanceReport);
-// router.post("/update-reg-no", updateregno);
 
 
 //---------------------profile-------------------------
@@ -358,14 +252,6 @@ router.post("/dropdown-city",  getCityDropdown);
 // router.post("/get-all-courses-by-assigned-user", authMiddleware, getAllCoursesAtt)
 
 
-//-------------------------notice---------------------------
-// router.post("/create-update-notice", authMiddleware, createUpdateNotice);
-// router.post("/get-notices", authMiddleware, getNotice);
-// router.post("/get-notice-count", authMiddleware, getNoticeCount);
-// router.post("/delete-notice", authMiddleware, deleteNotice);
-// router.post("/restore-notice", authMiddleware, restoreNotice);
-// router.post("/publish-notice", authMiddleware, publishNotice);
-// router.post("/unpublish-notice", authMiddleware, unpublishNotice);
 
 export default router;
 
