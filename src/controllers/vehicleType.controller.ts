@@ -14,7 +14,7 @@ export const createUpdateCabType = async (
       image = "",
       tags = [],
       sortOrder = 0,
-      isPopular = false,
+      isPopular = false,    
     } = req.body;
 
     const userId = req.user?._id;
