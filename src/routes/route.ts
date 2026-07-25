@@ -63,6 +63,7 @@ import { changeVehicleStatus, createUpdateVehicle, deleteVehicle, getAllVehicle,
 import { changeStateStatus, createUpdateState, deleteState, getAllState, getSingleState, getStateDropdown, restoreState } from "../controllers/state/state.controller";
 import { changeCityStatus, createUpdateCity, deleteCity, getAllCity, getCityDropdown, getSingleCity, restoreCity } from "../controllers/city/city.controller";
 import { changeRouteStatus, createUpdateRoute, deleteRoute, getAllRoute, getRouteDropdown, getSingleRoute, restoreRoute } from "../controllers/route/route.controller";
+import { createUpdateRouteFare, getAllRouteFare, getSingleRouteFare ,deleteRouteFare,restoreRouteFare,changeRouteFareStatus,getRouteFareDropdown} from "../controllers/routefare/routeFare.controller";
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
 // import { createBlog, deleteBlogtwo, getBlogById, getBlogs, updateBlog } from "../controllers/blogtwo";
 // import { getEmailAccounts } from "../controllers/email"
@@ -170,7 +171,15 @@ router.post("/change-status-route",authMiddleware,changeRouteStatus);
 router.post("/dropdown-route", getRouteDropdown);
 
 
+//--------------------RouteFare------------------
 
+router.post("/create-update", authMiddleware,createUpdateRouteFare);
+router.post("/all", getAllRouteFare);
+router.post("/single", getSingleRouteFare);
+router.post("/delete",authMiddleware, deleteRouteFare);
+router.post("/restore", authMiddleware,restoreRouteFare);
+router.post("/change-status", authMiddleware,changeRouteFareStatus);
+router.post("/dropdown", getRouteFareDropdown);
 
 
 
