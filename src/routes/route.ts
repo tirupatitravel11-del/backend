@@ -173,13 +173,13 @@ router.post("/dropdown-route", getRouteDropdown);
 
 //--------------------RouteFare------------------
 
-router.post("/create-update", authMiddleware,createUpdateRouteFare);
-router.post("/all", getAllRouteFare);
-router.post("/single", getSingleRouteFare);
-router.post("/delete",authMiddleware, deleteRouteFare);
-router.post("/restore", authMiddleware,restoreRouteFare);
-router.post("/change-status", authMiddleware,changeRouteFareStatus);
-router.post("/dropdown", getRouteFareDropdown);
+router.post("/create-update-fare", authMiddleware,createUpdateRouteFare);
+router.post("/all-fare", getAllRouteFare);
+router.post("/single-fare", getSingleRouteFare);
+router.post("/delete-fare",authMiddleware, deleteRouteFare);
+router.post("/restore-fare", authMiddleware,restoreRouteFare);
+router.post("/change-status-fare", authMiddleware,changeRouteFareStatus);
+router.post("/dropdown-fare", getRouteFareDropdown);
 
 
 
