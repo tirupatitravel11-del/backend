@@ -64,6 +64,7 @@ import { changeStateStatus, createUpdateState, deleteState, getAllState, getSing
 import { changeCityStatus, createUpdateCity, deleteCity, getAllCity, getCityDropdown, getSingleCity, restoreCity } from "../controllers/city/city.controller";
 import { changeRouteStatus, createUpdateRoute, deleteRoute, getAllRoute, getRouteDropdown, getSingleRoute, restoreRoute } from "../controllers/route/route.controller";
 import { createUpdateRouteFare, getAllRouteFare, getSingleRouteFare ,deleteRouteFare,restoreRouteFare,changeRouteFareStatus,getRouteFareDropdown} from "../controllers/routefare/routeFare.controller";
+import { getRoutePage, searchRoute } from "../controllers/web/webapiController";
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
 // import { createBlog, deleteBlogtwo, getBlogById, getBlogs, updateBlog } from "../controllers/blogtwo";
 // import { getEmailAccounts } from "../controllers/email"
@@ -182,7 +183,9 @@ router.post("/change-status-fare", authMiddleware,changeRouteFareStatus);
 router.post("/dropdown-fare", getRouteFareDropdown);
 
 
-
+//------------------web api---------------------
+router.post("/search-route", searchRoute);
+router.get("/page/:slug", getRoutePage);
 
 //------------------upload images---------------------
 // router.post("/upload-file", authMiddleware, upload.single("file"), uploadToR2);
