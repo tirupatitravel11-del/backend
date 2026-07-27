@@ -135,16 +135,16 @@ const vehicleSchema = new Schema<IVehicle>(
       createdAt: "created_at",
       updatedAt: "updated_at",
     },
-  }
+  },
 );
 
-vehicleSchema.index({ slug: 1 }, { unique: true });
-vehicleSchema.index({ name: 1 });
-vehicleSchema.index({ brand: 1 });
-vehicleSchema.index({ cab_type_id: 1 });
-vehicleSchema.index({ isPopular: 1 });
-vehicleSchema.index({ sortOrder: 1 });
-vehicleSchema.index({ isActive: 1 });
-vehicleSchema.index({ isDeleted: 1 });
+// vehicleSchema.index({ slug: 1 }, { unique: true });
+// vehicleSchema.index({ name: 1 });
+// vehicleSchema.index({ brand: 1 });
+// vehicleSchema.index({ cab_type_id: 1 });
+// vehicleSchema.index({ isPopular: 1 });
+// vehicleSchema.index({ sortOrder: 1 });
+// vehicleSchema.index({ isActive: 1 });
+// vehicleSchema.index({ isDeleted: 1 });
 
 export default mongoose.model<IVehicle>("vehicles", vehicleSchema);

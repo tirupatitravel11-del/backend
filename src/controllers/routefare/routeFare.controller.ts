@@ -3,10 +3,7 @@ import RouteFareModel from "../../models/routefare/routefare.model";
 import RouteModel from "../../models/route/route.model";
 import VehicleModel from "../../models/vehicle.model";
 
-export const createUpdateRouteFare = async (
-  req: Request,
-  res: Response
-) => {
+export const createUpdateRouteFare = async (req: Request, res: Response) => {
   try {
     const {
       id,
@@ -23,7 +20,7 @@ export const createUpdateRouteFare = async (
       nightCharge = 0,
       waitingCharge = 0,
     } = req.body;
-
+    console.log(req.body, "deee");
     const userId = req.user?._id;
 
     if (!route_id) {
@@ -175,12 +172,7 @@ export const createUpdateRouteFare = async (
   }
 };
 
-
-
-export const getAllRouteFare = async (
-  req: Request,
-  res: Response
-) => {
+export const getAllRouteFare = async (req: Request, res: Response) => {
   try {
     const {
       page = 1,
@@ -198,11 +190,9 @@ export const getAllRouteFare = async (
     if (vehicle_id) filter.vehicle_id = vehicle_id;
     if (tripType) filter.tripType = tripType;
 
-    if (typeof isActive === "boolean")
-      filter.isActive = isActive;
+    if (typeof isActive === "boolean") filter.isActive = isActive;
 
-    if (typeof isDeleted === "boolean")
-      filter.isDeleted = isDeleted;
+    if (typeof isDeleted === "boolean") filter.isDeleted = isDeleted;
 
     const total = await RouteFareModel.countDocuments(filter);
 
@@ -240,10 +230,7 @@ export const getAllRouteFare = async (
   }
 };
 
-export const getSingleRouteFare = async (
-  req: Request,
-  res: Response
-) => {
+export const getSingleRouteFare = async (req: Request, res: Response) => {
   try {
     const { id } = req.body;
 
@@ -277,11 +264,7 @@ export const getSingleRouteFare = async (
   }
 };
 
-
-export const deleteRouteFare = async (
-  req: Request,
-  res: Response
-) => {
+export const deleteRouteFare = async (req: Request, res: Response) => {
   try {
     const { id } = req.body;
 
@@ -314,12 +297,7 @@ export const deleteRouteFare = async (
   }
 };
 
-
-
-export const restoreRouteFare = async (
-  req: Request,
-  res: Response
-) => {
+export const restoreRouteFare = async (req: Request, res: Response) => {
   try {
     const { id } = req.body;
 
@@ -352,10 +330,7 @@ export const restoreRouteFare = async (
   }
 };
 
-export const changeRouteFareStatus = async (
-  req: Request,
-  res: Response
-) => {
+export const changeRouteFareStatus = async (req: Request, res: Response) => {
   try {
     const { id, isActive } = req.body;
 
@@ -390,10 +365,7 @@ export const changeRouteFareStatus = async (
   }
 };
 
-export const getRouteFareDropdown = async (
-  req: Request,
-  res: Response
-) => {
+export const getRouteFareDropdown = async (req: Request, res: Response) => {
   try {
     const fares = await RouteFareModel.find({
       isActive: true,

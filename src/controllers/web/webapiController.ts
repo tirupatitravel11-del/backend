@@ -7,7 +7,10 @@ import RouteFareModel from "../../models/routefare/routefare.model";
 
 export const searchRoute = async (req: Request, res: Response) => {
   try {
+    console.log("sdf");
     const { from, to } = req.body;
+
+    console.log(req.body);
 
     if (!from || !to) {
       return res.status(400).json({
@@ -69,7 +72,6 @@ export const searchRoute = async (req: Request, res: Response) => {
   }
 };
 
-
 // controllers/web/page.controller.ts
 export const getRoutePage = async (req: Request, res: Response) => {
   try {
@@ -101,17 +103,8 @@ export const getRoutePage = async (req: Request, res: Response) => {
       },
     });
 
-    const vehicles = fares.map((fare: any) => ({
-      id: fare.vehicle_id._id,
-      name: fare.vehicle_id.name,
-      brand: fare.vehicle_id.brand,
-      cabType: fare.vehicle_id.cab_type_id?.name,
-      image: fare.vehicle_id.image,
-      passengerCapacity: fare.vehicle_id.passengerCapacity,
-      luggageCapacity: fare.vehicle_id.luggageCapacity,
-      fuelType: fare.vehicle_id.fuelType,
-      transmission: fare.vehicle_id.transmission,
-      airCondition: fare.vehicle_id.airCondition,
+    const routeFare = fares.map((fare: any) => ({
+      id: fare._id,
 
       tripType: fare.tripType,
       baseFare: fare.baseFare,
@@ -123,21 +116,50 @@ export const getRoutePage = async (req: Request, res: Response) => {
       parkingCharge: fare.parkingCharge,
       waitingCharge: fare.waitingCharge,
       nightCharge: fare.nightCharge,
+
+      vehicle: {
+        id: fare.vehicle_id?._id,
+        name: fare.vehicle_id?.name,
+        brand: fare.vehicle_id?.brand,
+        image: fare.vehicle_id?.image,
+
+        cabType: {
+          id: fare.vehicle_id?.cab_type_id?._id,
+          name: fare.vehicle_id?.cab_type_id?.name,
+        },
+
+        passengerCapacity: fare.vehicle_id?.passengerCapacity,
+        luggageCapacity: fare.vehicle_id?.luggageCapacity,
+        fuelType: fare.vehicle_id?.fuelType,
+        transmission: fare.vehicle_id?.transmission,
+        airCondition: fare.vehicle_id?.airCondition,
+      },
     }));
 
-    return res.json({
+    return res.status(200).json({
       success: true,
+      message: "Route page fetched successfully.",
 
       route: {
         id: route._id,
         slug: route.slug,
         distance: route.distance,
         duration: route.duration,
-        fromCity: (route as any).from_city_id.name,
-        toCity: (route as any).to_city_id.name,
+
+        fromCity: {
+          id: (route as any).from_city_id?._id,
+          name: (route as any).from_city_id?.name,
+          slug: (route as any).from_city_id?.slug,
+        },
+
+        toCity: {
+          id: (route as any).to_city_id?._id,
+          name: (route as any).to_city_id?.name,
+          slug: (route as any).to_city_id?.slug,
+        },
       },
 
-      vehicles,
+      routeFare,
     });
   } catch (error: any) {
     return res.status(500).json({
