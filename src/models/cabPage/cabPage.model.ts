@@ -203,11 +203,11 @@ const seoSchema = new Schema<ISeo>(
 
 const cabPageSchema = new Schema<ICabPage>(
   {
-    title: {
-      type: String,
-      trim: true,
-      required: true,
-    },
+    // title: {
+    //   type: String,
+    //   trim: true,
+    //   required: true,
+    // },
 
     slug: {
       type: String,
