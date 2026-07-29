@@ -139,7 +139,7 @@ const vehicleSchema = new Schema<IVehicle>(
 
 const fareDetailSchema = new Schema<IFareDetail>(
   {
-    vehicle: String,
+    // vehicle: String,
     localFare: Number,
     roundTripFare: Number,
     oneWayFare: Number,
