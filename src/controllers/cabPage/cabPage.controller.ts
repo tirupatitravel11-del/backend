@@ -11,7 +11,7 @@ export const createUpdateCabPage = async (
     const {
       id,
 
-      title,
+    //   title,
       cityName,
       startingFare,
 
@@ -63,12 +63,12 @@ export const createUpdateCabPage = async (
       displayOrder,
       isActive,
     } = req.body;
-        if (!title) {
-      return res.status(400).json({
-        success: false,
-        message: "Title is required.",
-      });
-    }
+    //     if (!title) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Title is required.",
+    //   });
+    // }
 
     if (!fromCity) {
       return res.status(400).json({
@@ -177,7 +177,7 @@ if (routes?.length) {
       });
     }
         const payload = {
-      title: title.trim(),
+    //   title: title.trim(),
 
       slug,
 
