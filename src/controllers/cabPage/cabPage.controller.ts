@@ -15,9 +15,9 @@ export const createUpdateCabPage = async (
       cityName,
       startingFare,
 
-      badgeText,
-      heroHeading,
-      heroDescription,
+    //   badgeText,
+    //   heroHeading,
+    //   heroDescription,
 
       sectionHeading,
       sectionDescription,
@@ -126,16 +126,16 @@ if (vehicles?.length) {
     }
   }
 }
-if (fareDetails?.length) {
-  for (const fare of fareDetails) {
-    if (!fare.vehicle) {
-      return res.status(400).json({
-        success: false,
-        message: "Vehicle is required in fare details.",
-      });
-    }
-  }
-}
+// if (fareDetails?.length) {
+//   for (const fare of fareDetails) {
+//     if (!fare.vehicle) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Vehicle is required in fare details.",
+//       });
+//     }
+//   }
+// }
 if (faqs?.length) {
   for (const faq of faqs) {
     if (!faq.question || !faq.answer) {
@@ -189,11 +189,11 @@ if (routes?.length) {
 
       startingFare,
 
-      badgeText,
+    //   badgeText,
 
-      heroHeading,
+    //   heroHeading,
 
-      heroDescription,
+    //   heroDescription,
 
       sectionHeading,
 
