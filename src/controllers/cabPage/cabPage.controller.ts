@@ -429,3 +429,49 @@ export const getCabPageBySlug = async (
     });
   }
 };
+
+
+export const getCabPageData = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { cityName } = req.body;
+
+    if (!cityName) {
+      return res.status(400).json({
+        success: false,
+        message: "City Name is required.",
+      });
+    }
+
+    const cabPage = await CabPageModel.findOne({
+      cityName: {
+        $regex: `^${cityName}$`,
+        $options: "i",
+      },
+      isActive: true,
+      isDeleted: false,
+    });
+
+    if (!cabPage) {
+      return res.status(404).json({
+        success: false,
+        message: "Cab Page not found.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Cab Page fetched successfully.",
+      data: cabPage,
+    });
+  } catch (error: any) {
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Internal server error.",
+    });
+  }
+};
