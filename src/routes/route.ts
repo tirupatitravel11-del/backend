@@ -136,7 +136,16 @@ import {
   getSingleRouteSeo,
   restoreRouteSeo,
 } from "../controllers/seo/seo.controller";
-import { changeNearbyCityStatus, createUpdateNearbyCity, deleteNearbyCity, getAllNearbyCity, getNearbyCityDropdown, getSingleNearbyCity, restoreNearbyCity } from "../controllers/nearbycity/nearbycity.controller";
+import {
+  changeNearbyCityStatus,
+  createUpdateNearbyCity,
+  deleteNearbyCity,
+  getAllNearbyCity,
+  getNearbyCityDropdown,
+  getSingleNearbyCity,
+  restoreNearbyCity,
+} from "../controllers/nearbycity/nearbycity.controller";
+import { createUpdateCabPage, getCabPageBySlug } from "../controllers/cabPage/cabPage.controller";
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
 // import { createBlog, deleteBlogtwo, getBlogById, getBlogs, updateBlog } from "../controllers/blogtwo";
 // import { getEmailAccounts } from "../controllers/email"
@@ -247,14 +256,21 @@ router.post("/restore-fare", authMiddleware, restoreRouteFare);
 router.post("/change-status-fare", authMiddleware, changeRouteFareStatus);
 router.post("/dropdown-fare", getRouteFareDropdown);
 
-
 //------------------nearByCity---------------------
-router.post("/create-update-nearbycity", authMiddleware, createUpdateNearbyCity);
-router.post("/get-all-nearbycity",  getAllNearbyCity);
-router.post("/get-single-nearbycity",  getSingleNearbyCity);
+router.post(
+  "/create-update-nearbycity",
+  authMiddleware,
+  createUpdateNearbyCity,
+);
+router.post("/get-all-nearbycity", getAllNearbyCity);
+router.post("/get-single-nearbycity", getSingleNearbyCity);
 router.post("/delete-nearbycity", authMiddleware, deleteNearbyCity);
 router.post("/restore-nearbycity", authMiddleware, restoreNearbyCity);
-router.post("/change-status-nearbycity", authMiddleware, changeNearbyCityStatus);
+router.post(
+  "/change-status-nearbycity",
+  authMiddleware,
+  changeNearbyCityStatus,
+);
 router.post("/dropdown-nearbycity", getNearbyCityDropdown);
 
 //------------------seo---------------------
@@ -347,5 +363,6 @@ router.get("/page/:slug", getRoutePage);
 // router.post("/get-batches-assigned", authMiddleware, getBatchesAssigned)
 // router.post("/get-student-enrolled-batches", authMiddleware, getStuEnrolledBatches)
 // router.post("/get-all-courses-by-assigned-user", authMiddleware, getAllCoursesAtt)
-
+router.post("/create-update-cab-hub-page", authMiddleware, createUpdateCabPage);
+router.get("/:slug", getCabPageBySlug);
 export default router;
