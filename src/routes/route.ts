@@ -146,6 +146,7 @@ import {
   restoreNearbyCity,
 } from "../controllers/nearbycity/nearbycity.controller";
 import { createUpdateCabPage, getCabPageBySlug, getCabPageData } from "../controllers/cabPage/cabPage.controller";
+import authMiddleware from "../middleware/authMiddleware";
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
 // import { createBlog, deleteBlogtwo, getBlogById, getBlogs, updateBlog } from "../controllers/blogtwo";
 // import { getEmailAccounts } from "../controllers/email"
@@ -364,6 +365,7 @@ router.get("/page/:slug", getRoutePage);
 // router.post("/get-student-enrolled-batches", authMiddleware, getStuEnrolledBatches)
 // router.post("/get-all-courses-by-assigned-user", authMiddleware, getAllCoursesAtt)
 router.post("/create-update-cab-hub-page", authMiddleware, createUpdateCabPage);
+router.post("/create-update-cab-hub-page-bulk", authMiddleware, createBulkCabPages);
 router.get("/:slug", getCabPageBySlug);
 router.post("/get-page", getCabPageData);
 export default router;
