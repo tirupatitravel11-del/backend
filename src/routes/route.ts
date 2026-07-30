@@ -145,8 +145,8 @@ import {
   getSingleNearbyCity,
   restoreNearbyCity,
 } from "../controllers/nearbycity/nearbycity.controller";
-import { createUpdateCabPage, getCabPageBySlug, getCabPageData } from "../controllers/cabPage/cabPage.controller";
-import authMiddleware from "../middleware/authMiddleware";
+import { createBulkCabPages, createUpdateCabPage, getCabPageBySlug, getCabPageData } from "../controllers/cabPage/cabPage.controller";
+
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
 // import { createBlog, deleteBlogtwo, getBlogById, getBlogs, updateBlog } from "../controllers/blogtwo";
 // import { getEmailAccounts } from "../controllers/email"
