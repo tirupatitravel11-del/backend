@@ -9,7 +9,7 @@ export const createUpdateCabPage = async (
   try {
     const {
       id,
-    cityName,
+      cityName,
       startingFare,
       overview,
       famousFor,
@@ -141,26 +141,23 @@ if (routes?.length) {
     }
   }
 }
-    //     const slug = slugify(
-    //   `${fromCity}-to-${toCity}`,
-    //   {
-    //     lower: true,
-    //     strict: true,
-    //     trim: true,
-    //   }
-    // );
-    //     const duplicate = await CabPageModel.findOne({
-    //   slug,
-    //   isDeleted: false,
-    //   ...(id ? { _id: { $ne: id } } : {}),
-    // });
+     const slug = slugify(cityName, {
+  lower: true,
+  strict: true,
+  trim: true,
+});
+        const duplicate = await CabPageModel.findOne({
+      slug,
+      isDeleted: false,
+      ...(id ? { _id: { $ne: id } } : {}),
+    });
 
-    // if (duplicate) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: "Cab Page already exists.",
-    //   });
-    // }
+    if (duplicate) {
+      return res.status(400).json({
+        success: false,
+        message: "Cab Page already exists.",
+      });
+    }
         const payload = {
       cityName,
       startingFare,
@@ -180,8 +177,8 @@ if (routes?.length) {
       faqs: faqs || [],
       routes: routes || [],
       isActive: isActive ?? true,
+      slug,
       // title: title.trim(),
-      // slug,
       // fromCity,
       // toCity,
       // badgeText,
