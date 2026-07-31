@@ -599,3 +599,60 @@ export const createBulkCabPages = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getCabPageDropdown = async (
+  req: Request,
+  res: Response
+) => {
+    console.log("Dropdown API Hit");
+  try {
+    const {
+      search = "",
+      page = 1,
+      limit = 5,
+    } = req.body;
+
+    const query: any = {
+      isDeleted: false,
+      isActive: true,
+    };
+
+    if (search) {
+      query.cityName = {
+        $regex: search,
+        $options: "i",
+      };
+    }
+
+    const currentPage = Number(page);
+    const pageSize = Number(limit);
+
+    const total = await CabPageModel.countDocuments(query);
+
+    const cities = await CabPageModel.find(
+      query,
+      {
+        cityName: 1,
+        slug: 1,
+      }
+    )
+      .sort({ cityName: 1 })
+      .skip((currentPage - 1) * pageSize)
+      .limit(pageSize);
+
+    return res.status(200).json({
+      success: true,
+      total,
+      page: currentPage,
+      limit: pageSize,
+      data: cities,
+    });
+  } catch (error: any) {
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
