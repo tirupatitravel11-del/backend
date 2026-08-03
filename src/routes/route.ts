@@ -146,6 +146,7 @@ import {
   restoreNearbyCity,
 } from "../controllers/nearbycity/nearbycity.controller";
 import { createBulkCabPages, createUpdateCabPage, getCabPageBySlug, getCabPageData, getCabPageDropdown } from "../controllers/cabPage/cabPage.controller";
+import { createUpdateHotel, getHotelsByCity } from "../controllers/hotel/hotel.controller";
 
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
 // import { createBlog, deleteBlogtwo, getBlogById, getBlogs, updateBlog } from "../controllers/blogtwo";
@@ -369,5 +370,11 @@ router.post("/create-update-cab-hub-page-bulk", authMiddleware, createBulkCabPag
 router.get("/:slug", getCabPageBySlug);
 router.post("/get-page", getCabPageData);
 router.post("/dropdown-cabhub-city", getCabPageDropdown);
+
+//----------------------Hotel--------------------------
+router.post("/create-update-hotel", authMiddleware, createUpdateHotel);
+router.get("/hotel/:slug", getHotelsByCity);
+
+
 
 export default router;
