@@ -89,9 +89,6 @@ const cabTypeSchema = new Schema<ICabType>(
   }
 );
 
-cabTypeSchema.index({ slug: 1 }, { unique: true });
-cabTypeSchema.index({ name: 1 });
-cabTypeSchema.index({ isPopular: 1 });
-cabTypeSchema.index({ sortOrder: 1 });
+
 
 export default mongoose.model<ICabType>("cabtypes", cabTypeSchema);

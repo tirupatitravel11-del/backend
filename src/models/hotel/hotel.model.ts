@@ -6,38 +6,25 @@ export interface IHotel {
 
   cab_page_id: Types.ObjectId;
 
+  address: string;
+  description: string;
+
   categories: string[];
-
-  address?: string;
-  description?: string;
-
+  amenities: string[];
   images: string[];
 
   starRating: number;
 
-  priceFrom?: number;
-  priceTo?: number;
+  priceFrom: number;
+  priceTo: number;
 
-  amenities: string[];
+  contactNumber: string;
+  email: string;
+  website: string;
 
-  contactNumber?: string;
-  website?: string;
-  email?: string;
-
-  checkInTime?: string;
-  checkOutTime?: string;
-
-  latitude?: number;
-  longitude?: number;
-
-  seo?: {
-    metaTitle?: string;
-    metaDescription?: string;
-    metaKeywords?: string[];
-  };
+  priority: number;
 
   isPopular: boolean;
-  sortOrder: number;
 
   isActive: boolean;
   isDeleted: boolean;
@@ -65,13 +52,8 @@ const hotelSchema = new Schema<IHotel>(
 
     cab_page_id: {
       type: Schema.Types.ObjectId,
-      ref: "CabPage",
+      ref: "cab_pages",
       required: true,
-    },
-
-    categories: {
-      type: [String],
-      default: [],
     },
 
     address: {
@@ -84,6 +66,16 @@ const hotelSchema = new Schema<IHotel>(
       default: "",
     },
 
+    categories: {
+      type: [String],
+      default: [],
+    },
+
+    amenities: {
+      type: [String],
+      default: [],
+    },
+
     images: {
       type: [String],
       default: [],
@@ -92,31 +84,19 @@ const hotelSchema = new Schema<IHotel>(
     starRating: {
       type: Number,
       default: 0,
-      min: 0,
-      max: 5,
     },
 
     priceFrom: {
       type: Number,
-      default: null,
+      default: 0,
     },
 
     priceTo: {
       type: Number,
-      default: null,
-    },
-
-    amenities: {
-      type: [String],
-      default: [],
+      default: 0,
     },
 
     contactNumber: {
-      type: String,
-      default: "",
-    },
-
-    website: {
       type: String,
       default: "",
     },
@@ -126,49 +106,19 @@ const hotelSchema = new Schema<IHotel>(
       default: "",
     },
 
-    checkInTime: {
+    website: {
       type: String,
       default: "",
     },
 
-    checkOutTime: {
-      type: String,
-      default: "",
-    },
-
-    latitude: {
+    priority: {
       type: Number,
-      default: null,
-    },
-
-    longitude: {
-      type: Number,
-      default: null,
-    },
-
-    seo: {
-      metaTitle: {
-        type: String,
-        default: "",
-      },
-      metaDescription: {
-        type: String,
-        default: "",
-      },
-      metaKeywords: {
-        type: [String],
-        default: [],
-      },
+      default: 1,
     },
 
     isPopular: {
       type: Boolean,
       default: false,
-    },
-
-    sortOrder: {
-      type: Number,
-      default: 0,
     },
 
     isActive: {
@@ -183,14 +133,12 @@ const hotelSchema = new Schema<IHotel>(
 
     created_by: {
       type: Schema.Types.ObjectId,
-      ref: "User",
-      default: null,
+      ref: "users",
     },
 
     updated_by: {
       type: Schema.Types.ObjectId,
-      ref: "User",
-      default: null,
+      ref: "users",
     },
   },
   {
@@ -198,11 +146,7 @@ const hotelSchema = new Schema<IHotel>(
       createdAt: "created_at",
       updatedAt: "updated_at",
     },
+    versionKey: false,
   }
 );
-
-
-
-const HotelModel = mongoose.model<IHotel>("Hotel", hotelSchema);
-
-export default HotelModel;
+export default mongoose.model<IHotel>("hotel", hotelSchema);
