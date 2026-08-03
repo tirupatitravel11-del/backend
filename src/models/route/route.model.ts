@@ -131,19 +131,9 @@ const routeSchema = new Schema<IRoute>(
   }
 );
 
-// routeSchema.index(
-//   {
-//     from_city_id: 1,
-//     to_city_id: 1,
-//   },
-//   {
-//     unique: true,
-//   }
-// );
 
-// routeSchema.index({ slug: 1 }, { unique: true });
-// routeSchema.index({ isPopular: 1 });
-// routeSchema.index({ isActive: 1 });
-// routeSchema.index({ isDeleted: 1 });
+
+
+
 
 export default mongoose.model<IRoute>("routes", routeSchema);

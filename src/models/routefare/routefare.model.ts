@@ -145,16 +145,7 @@ const routeFareSchema = new Schema<IRouteFare>(
   }
 );
 
-// routeFareSchema.index(
-//   {
-//     route_id: 1,
-//     vehicle_id: 1,
-//     tripType: 1,
-//   },
-//   {
-//     unique: true,
-//   }
-// );
+
 
 export default mongoose.model<IRouteFare>(
   "routefares",

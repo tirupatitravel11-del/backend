@@ -71,9 +71,5 @@ const stateSchema = new Schema<IState>(
   }
 );
 
-// stateSchema.index({ slug: 1 }, { unique: true });
-// stateSchema.index({ name: 1 });
-// stateSchema.index({ isDeleted: 1 });
-// stateSchema.index({ isActive: 1 });
 
 export default mongoose.model<IState>("states", stateSchema);

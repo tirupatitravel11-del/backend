@@ -2,54 +2,41 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import slugify from "slugify";
 
-import HotelModel from "../../models/hotel/hotel.model";
 import CabPageModel from "../../models/cabPage/cabPage.model";
+import HotelModel from "../../models/hotel/hotel.model";
 
-export const createUpdateHotel = async (
-  req: Request,
-  res: Response
-) => {
+export const createUpdateHotel = async (req: Request, res: Response) => {
   try {
     const {
       id,
       name,
       cab_page_id,
-
-      categories,
-
       address,
       description,
-
+      categories,
+      amenities,
       images,
-
       starRating,
-
       priceFrom,
       priceTo,
-
-      amenities,
-
       contactNumber,
-      website,
       email,
-
-      checkInTime,
-      checkOutTime,
-
-      latitude,
-      longitude,
-
-      seo,
-
+      website,
+      priority,
       isPopular,
-      sortOrder,
-
       isActive,
     } = req.body;
 
-    // -------------------------
-    // Validation
-    // -------------------------
+    // ---------------- Validation ----------------
+    const finalCategories =
+      typeof categories === "string"
+        ? categories.split(",").map((v: string) => v.trim())
+        : categories || [];
+
+    const finalAmenities =
+      typeof amenities === "string"
+        ? amenities.split(",").map((v: string) => v.trim())
+        : amenities || [];
 
     if (!name?.trim()) {
       return res.status(400).json({
@@ -80,14 +67,20 @@ export const createUpdateHotel = async (
     if (!cabPage) {
       return res.status(404).json({
         success: false,
-        message: "Cab page not found.",
+        message: "City not found.",
       });
     }
 
-    if (categories && !Array.isArray(categories)) {
+    if (!Array.isArray(finalCategories)) {
       return res.status(400).json({
         success: false,
         message: "Categories must be an array.",
+      });
+    }
+    if (!Array.isArray(finalAmenities)) {
+      return res.status(400).json({
+        success: false,
+        message: "Amenities must be an array.",
       });
     }
 
@@ -98,18 +91,7 @@ export const createUpdateHotel = async (
       });
     }
 
-    if (amenities && !Array.isArray(amenities)) {
-      return res.status(400).json({
-        success: false,
-        message: "Amenities must be an array.",
-      });
-    }
-
-    if (
-      priceFrom &&
-      priceTo &&
-      Number(priceFrom) > Number(priceTo)
-    ) {
+    if (priceFrom && priceTo && Number(priceFrom) > Number(priceTo)) {
       return res.status(400).json({
         success: false,
         message: "Price From cannot be greater than Price To.",
@@ -122,9 +104,7 @@ export const createUpdateHotel = async (
       trim: true,
     });
 
-    // -------------------------
-    // Duplicate Check
-    // -------------------------
+    // ---------------- Duplicate Check ----------------
 
     const duplicate = await HotelModel.findOne({
       cab_page_id,
@@ -144,10 +124,6 @@ export const createUpdateHotel = async (
       });
     }
 
-    // -------------------------
-    // Payload
-    // -------------------------
-
     const payload = {
       name: name.trim(),
 
@@ -155,45 +131,35 @@ export const createUpdateHotel = async (
 
       cab_page_id,
 
-      categories: categories || [],
-
       address,
 
       description,
+
+      categories: finalCategories,
+
+      amenities: finalAmenities,
 
       images: images || [],
 
       starRating: starRating || 0,
 
-      priceFrom,
+      priceFrom: priceFrom || 0,
 
-      priceTo,
-
-      amenities: amenities || [],
+      priceTo: priceTo || 0,
 
       contactNumber,
 
-      website,
-
       email,
 
-      checkInTime,
+      website,
 
-      checkOutTime,
-
-      latitude,
-
-      longitude,
-
-      seo: seo || {},
+      priority: priority || 1,
 
       isPopular: isPopular ?? false,
 
-      sortOrder: sortOrder || 0,
-
       isActive: isActive ?? true,
     };
-        // -------------------------
+    // -------------------------
     // Update Hotel
     // -------------------------
 
@@ -201,7 +167,7 @@ export const createUpdateHotel = async (
       if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).json({
           success: false,
-          message: "Invalid Hotel ID.",
+          message: "Invalid hotel id.",
         });
       }
 
@@ -225,7 +191,7 @@ export const createUpdateHotel = async (
         },
         {
           new: true,
-        }
+        },
       );
 
       return res.status(200).json({
@@ -255,6 +221,53 @@ export const createUpdateHotel = async (
     return res.status(500).json({
       success: false,
       message: error.message || "Internal Server Error.",
+    });
+  }
+};
+
+
+export const getHotelsByCity = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { slug } = req.params;
+console.log(slug, "check")
+    // Find City
+    const cabPage = await CabPageModel.findOne({
+      slug,
+      isDeleted: false,
+      isActive: true,
+    });
+
+    if (!cabPage) {
+      return res.status(404).json({
+        success: false,
+        message: "City not found.",
+      });
+    }
+
+    // Find Hotels
+    const hotels = await HotelModel.find({
+      cab_page_id: cabPage._id,
+      isDeleted: false,
+      isActive: true,
+    }).sort({
+      priority: 1,
+      isPopular: -1,
+      name: 1,
+    });
+
+    return res.status(200).json({
+      success: true,
+      city: cabPage.cityName,
+      hotels,
+    });
+
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
     });
   }
 };
