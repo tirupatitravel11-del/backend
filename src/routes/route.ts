@@ -374,7 +374,7 @@ router.post("/dropdown-cabhub-city", getCabPageDropdown);
 //----------------------Hotel--------------------------
 router.post("/create-update-hotel", authMiddleware, createUpdateHotel);
 router.get("/hotel/:slug", getHotelsByCity);
-
+// edvhsdh
 
 
 export default router;
