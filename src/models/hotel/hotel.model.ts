@@ -1,4 +1,8 @@
 import mongoose, { Schema, Types } from "mongoose";
+interface IRoom {
+  roomName: string;
+  price: number;
+}
 
 export interface IHotel {
   name: string;
@@ -17,7 +21,7 @@ export interface IHotel {
 
   priceFrom: number;
   priceTo: number;
-
+  rooms: IRoom[];
   contactNumber: string;
   email: string;
   website: string;
@@ -95,7 +99,19 @@ const hotelSchema = new Schema<IHotel>(
       type: Number,
       default: 0,
     },
-
+rooms: [
+  {
+    roomName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+  },
+],
     contactNumber: {
       type: String,
       default: "",

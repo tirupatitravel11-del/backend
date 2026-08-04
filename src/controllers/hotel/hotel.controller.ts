@@ -19,6 +19,7 @@ export const createUpdateHotel = async (req: Request, res: Response) => {
       starRating,
       priceFrom,
       priceTo,
+      rooms,
       contactNumber,
       email,
       website,
@@ -97,7 +98,34 @@ export const createUpdateHotel = async (req: Request, res: Response) => {
         message: "Price From cannot be greater than Price To.",
       });
     }
+    if (rooms && !Array.isArray(rooms)) {
+      return res.status(400).json({
+        success: false,
+        message: "Rooms must be an array.",
+      });
+    }
 
+    if (rooms?.length) {
+      for (const room of rooms) {
+        if (!room.roomName?.trim()) {
+          return res.status(400).json({
+            success: false,
+            message: "Room name is required.",
+          });
+        }
+
+        if (
+          room.price === undefined ||
+          room.price === null ||
+          isNaN(Number(room.price))
+        ) {
+          return res.status(400).json({
+            success: false,
+            message: "Room price is invalid.",
+          });
+        }
+      }
+    }
     const slug = slugify(name, {
       lower: true,
       strict: true,
@@ -140,7 +168,7 @@ export const createUpdateHotel = async (req: Request, res: Response) => {
       amenities: finalAmenities,
 
       images: images || [],
-
+      rooms: rooms || [],
       starRating: starRating || 0,
 
       priceFrom: priceFrom || 0,
@@ -225,11 +253,7 @@ export const createUpdateHotel = async (req: Request, res: Response) => {
   }
 };
 
-
-export const getHotelsByCity = async (
-  req: Request,
-  res: Response
-) => {
+export const getHotelsByCity = async (req: Request, res: Response) => {
   try {
     const { slug } = req.params;
 
@@ -263,7 +287,6 @@ export const getHotelsByCity = async (
       city: cabPage.cityName,
       hotels,
     });
-
   } catch (error: any) {
     return res.status(500).json({
       success: false,
