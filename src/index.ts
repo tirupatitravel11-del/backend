@@ -98,11 +98,11 @@ app.set("io", io);
 app.set("trust proxy", 1);
 
 
-const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 min
-  max: 100, // 100 request per IP
-  message: "Too many requests, try again later"
-});
+// const globalLimiter = rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 min
+//   max: 100, // 100 request per IP
+//   message: "Too many requests, try again later"
+// });
 
 // app.use((req, res, next) => {
 //   if (req.path.startsWith("/api/cyberous")) {
@@ -114,10 +114,21 @@ const globalLimiter = rateLimit({
 
 
 // app.use(globalLimiter);
-let exporesJSONConfig: bodyParser.OptionsUrlencoded = { extended: true }
+// let exporesJSONConfig: bodyParser.OptionsUrlencoded = { extended: true }
 
-app.use(express.json(exporesJSONConfig));
+// app.use(express.json(exporesJSONConfig));
+app.use(
+  express.json({
+    limit: "50mb",
+  })
+);
 
+app.use(
+  express.urlencoded({
+    extended: true,
+    limit: "50mb",
+  })
+);
 declare module "express-session" {
   export interface SessionData {
     token: string;
@@ -157,9 +168,9 @@ if (process.env.SESSION_SECRET) {
   };
   app.use(expressSession(expressSessionOptions));
 }
-app.use(express.json());
-
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(express.json());
+app.set("trust proxy", 1);
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 app.use(cookieParser());
@@ -198,118 +209,7 @@ app.get("/api/config/statustype", async (req, res) => {
     status_type: "ACCOUNT DELETED",
     status_type_id: 999,
   });
-//   await statusTypeModel.create({
-//     status_type: "ACTIVE SERVICE",
-//     status_type_id: 11,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "INACTIVE SERVICE",
-//     status_type_id: 12,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "BLOG ACTIVE",
-//     status_type_id: 13,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "BLOG DELETED",
-//     status_type_id: 14,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "COURSE ACTIVE",
-//     status_type_id: 20,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "COURSE DELETED",
-//     status_type_id: 21,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "BATCH ACTIVE",
-//     status_type_id: 22,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "BATCH DELETED",
-//     status_type_id: 23,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "ENROLLMENT ACTIVE",
-//     status_type_id: 24,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "ENROLLMENT DELETED",
-//     status_type_id: 25,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "ENROLLMENT COMPLETED",
-//     status_type_id: 26,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "TRAINING COURSE MODULES ACTIVE",
-//     status_type_id: 27,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "TRAINING COURSE MODULES INACTIVE",
-//     status_type_id: 28,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "MAIN COURSE ACTIVE",
-//     status_type_id: 30,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "MAIN COURSE DELETED",
-//     status_type_id: 31,
-//   });
 
-//   await statusTypeModel.create({ status_type: "STRIPE", status_type_id: 32 });
-//   await statusTypeModel.create({ status_type: "CASH", status_type_id: 33 });
-//   await statusTypeModel.create({ status_type: "UPI", status_type_id: 34 });
-//   await statusTypeModel.create({
-//     status_type: "FLASH ACTIVE",
-//     status_type_id: 40,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "FLASH DELETED",
-//     status_type_id: -40,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "LEADS ACTIVE",
-//     status_type_id: 38,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "LEADS DELETED",
-//     status_type_id: 39,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "EMAIL ACCOUNTS ACTIVE",
-//     status_type_id: 41,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "EMAIL ACCOUNTS DELETED",
-//     status_type_id: -41,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "EMAIL TEMPLATE ACTIVE",
-//     status_type_id: 42,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "EMAIL TEMPLATE DELETED",
-//     status_type_id: -42,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "BANNER ACTIVE",
-//     status_type_id: 43,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "BANNER DELETED",
-//     status_type_id: -43,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "NOTICE ACTIVE",
-//     status_type_id: 44,
-//   });
-//   await statusTypeModel.create({
-//     status_type: "NOTICE DELETED",
-//     status_type_id: -44,
-//   });
 });
 
 // app.get("/api/config/notificationtype", async (req, res) => {
