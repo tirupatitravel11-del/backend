@@ -9,7 +9,10 @@ import RouteSeoModel from "../../models/seo/seo.model";
 
 export const searchRoute = async (req: Request, res: Response) => {
   try {
+    console.log("sdf");
     const { from, to } = req.body;
+
+    console.log(req.body);
 
     if (!from || !to) {
       return res.status(400).json({
@@ -70,7 +73,6 @@ export const searchRoute = async (req: Request, res: Response) => {
     });
   }
 };
-
 
 // controllers/web/page.controller.ts
 // export const getRoutePage = async (req: Request, res: Response) => {

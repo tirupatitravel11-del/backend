@@ -262,7 +262,7 @@ export const createUpdateHotel = async (req: Request, res: Response) => {
 export const getHotelsByCity = async (req: Request, res: Response) => {
   try {
     const { slug } = req.params;
-
+console.log(slug, "check")
     // Find City
     const cabPage = await CabPageModel.findOne({
       slug,
@@ -286,7 +286,10 @@ export const getHotelsByCity = async (req: Request, res: Response) => {
       priority: 1,
       isPopular: -1,
       name: 1,
-    });
+    }).populate(
+      "cab_page_id",
+      "cityName slug"
+    );
 
     return res.status(200).json({
       success: true,

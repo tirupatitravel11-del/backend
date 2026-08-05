@@ -2,18 +2,9 @@ import { Request, Response } from "express";
 import slugify from "slugify";
 import StateModel from "../../models/state/state.model";
 
-export const createUpdateState = async (
-  req: Request,
-  res: Response
-) => {
+export const createUpdateState = async (req: Request, res: Response) => {
   try {
-    const {
-      id,
-      name,
-      code = "",
-      description = "",
-    } = req.body;
-
+    const { id, name, code = "", description = "" } = req.body;
     const userId = req.user?._id;
 
     if (!name) {
@@ -94,29 +85,17 @@ export const createUpdateState = async (
       message: "State created successfully.",
       data: newState,
     });
-
   } catch (error) {
-
     console.log(error);
 
     return res.status(500).json({
       error: "Internal server error.",
     });
-
   }
 };
-export const getAllState = async (
-  req: Request,
-  res: Response
-) => {
+export const getAllState = async (req: Request, res: Response) => {
   try {
-    const {
-      page = 1,
-      limit = 10,
-      search = "",
-      isActive,
-      isDeleted,
-    } = req.body;
+    const { page = 1, limit = 10, search = "", isActive, isDeleted } = req.body;
 
     const skip = (Number(page) - 1) * Number(limit);
 
@@ -176,10 +155,7 @@ export const getAllState = async (
   }
 };
 
-export const getSingleState = async (
-  req: Request,
-  res: Response
-) => {
+export const getSingleState = async (req: Request, res: Response) => {
   try {
     const { id } = req.body;
 
@@ -214,10 +190,7 @@ export const getSingleState = async (
   }
 };
 
-export const deleteState = async (
-  req: Request,
-  res: Response
-) => {
+export const deleteState = async (req: Request, res: Response) => {
   try {
     const { id } = req.body;
 
@@ -240,7 +213,7 @@ export const deleteState = async (
       },
       {
         new: true,
-      }
+      },
     );
 
     if (!state) {
@@ -263,10 +236,7 @@ export const deleteState = async (
   }
 };
 
-export const restoreState = async (
-  req: Request,
-  res: Response
-) => {
+export const restoreState = async (req: Request, res: Response) => {
   try {
     const { id } = req.body;
 
@@ -289,7 +259,7 @@ export const restoreState = async (
       },
       {
         new: true,
-      }
+      },
     );
 
     if (!state) {
@@ -312,11 +282,7 @@ export const restoreState = async (
   }
 };
 
-
-export const changeStateStatus = async (
-  req: Request,
-  res: Response
-) => {
+export const changeStateStatus = async (req: Request, res: Response) => {
   try {
     const { id, isActive } = req.body;
 
@@ -345,7 +311,7 @@ export const changeStateStatus = async (
       },
       {
         new: true,
-      }
+      },
     );
 
     if (!state) {
@@ -356,9 +322,7 @@ export const changeStateStatus = async (
 
     return res.status(200).json({
       success: true,
-      message: `State ${
-        isActive ? "activated" : "deactivated"
-      } successfully.`,
+      message: `State ${isActive ? "activated" : "deactivated"} successfully.`,
       data: state,
     });
   } catch (error) {
@@ -370,11 +334,7 @@ export const changeStateStatus = async (
   }
 };
 
-
-export const getStateDropdown = async (
-  req: Request,
-  res: Response
-) => {
+export const getStateDropdown = async (req: Request, res: Response) => {
   try {
     const states = await StateModel.find({
       isDeleted: false,
