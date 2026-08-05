@@ -124,6 +124,12 @@ export const createUpdateHotel = async (req: Request, res: Response) => {
             message: "Room price is invalid.",
           });
         }
+        if (!room.image?.trim()) {
+  return res.status(400).json({
+    success: false,
+    message: "Room image is required.",
+  });
+}
       }
     }
     const slug = slugify(name, {

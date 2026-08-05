@@ -1,7 +1,9 @@
 import mongoose, { Schema, Types } from "mongoose";
+import { required } from "zod/mini";
 interface IRoom {
   roomName: string;
   price: number;
+  image:string;
 }
 
 export interface IHotel {
@@ -110,6 +112,10 @@ rooms: [
       type: Number,
       required: true,
     },
+    image:{
+      type:String,
+      required:true
+    }
   },
 ],
     contactNumber: {
