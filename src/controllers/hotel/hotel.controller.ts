@@ -286,7 +286,10 @@ console.log(slug, "check")
       priority: 1,
       isPopular: -1,
       name: 1,
-    });
+    }).populate(
+      "cab_page_id",
+      "cityName slug"
+    );
 
     return res.status(200).json({
       success: true,
