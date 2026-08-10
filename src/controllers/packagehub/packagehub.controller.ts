@@ -412,7 +412,7 @@ export const getPackagesByCity = async (
 ) => {
   try {
     const { slug } = req.params;
-
+console.log(slug, "sdf")
     // =========================
     // PAGINATION
     // =========================
@@ -512,6 +512,62 @@ export const getPackagesByCity = async (
   } catch (error: any) {
     console.error(
       "Get Packages By City Error:",
+      error,
+    );
+
+    return res.status(500).json({
+      success: false,
+      message:
+        error.message ||
+        "Internal Server Error.",
+    });
+  }
+};
+export const getSinglePackage = async (
+  req: Request,
+  res: Response,
+) => {
+  try {
+    const slugParam = req.params.slug;
+
+    const slug = Array.isArray(slugParam)
+      ? slugParam[0]
+      : slugParam;
+
+    if (!slug?.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Package slug is required.",
+      });
+    }
+
+    const packageData =
+      await PackageHubModel.findOne({
+        slug: slug.trim().toLowerCase(),
+        isDeleted: false,
+        status: true,
+      })
+        .populate(
+          "cab_page_id",
+          "cityName slug",
+        )
+        .lean();
+
+    if (!packageData) {
+      return res.status(404).json({
+        success: false,
+        message: "Package not found.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Package fetched successfully.",
+      data: packageData,
+    });
+  } catch (error: any) {
+    console.error(
+      "Get Single Package Error:",
       error,
     );
 
