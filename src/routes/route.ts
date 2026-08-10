@@ -147,6 +147,7 @@ import {
 } from "../controllers/nearbycity/nearbycity.controller";
 import { createBulkCabPages, createUpdateCabPage, getCabPageBySlug, getCabPageData, getCabPageDropdown } from "../controllers/cabPage/cabPage.controller";
 import { createUpdateHotel, getHotelsByCity } from "../controllers/hotel/hotel.controller";
+import { createUpdatePackage,getPackagesByCity } from "../controllers/packagehub/packagehub.controller";
 
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
 // import { createBlog, deleteBlogtwo, getBlogById, getBlogs, updateBlog } from "../controllers/blogtwo";
@@ -374,6 +375,14 @@ router.post("/dropdown-cabhub-city", getCabPageDropdown);
 //----------------------Hotel--------------------------
 router.post("/create-update-hotel", authMiddleware, createUpdateHotel);
 router.get("/hotel/:slug", getHotelsByCity);
+
+
+router.post("/create-update-package", authMiddleware, createUpdatePackage);
+router.get("/package/:slug", getPackagesByCity);
+
+
+
+
 // edvhsdh
 
 
