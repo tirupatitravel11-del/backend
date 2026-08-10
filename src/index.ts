@@ -20,11 +20,7 @@ import notificationTokenModel from "./models/notification/notificationTokenModel
 
 import dns from "dns";
 
-dns.setServers([
-  "8.8.8.8",
-  "8.8.4.4"
-]);
-
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 dotenv.config();
 connectDB();
@@ -33,38 +29,36 @@ const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT;
 
-
-
-app.use(cors(
-  {
-     // local
-    origin: ["http://localhost:3000", 'http://localhost:3001'],
+app.use(
+  cors({
+    // local
+    origin: ["http://localhost:3000", "http://localhost:3001"],
     // staging
     // origin: [
-    //    'https://staging.cyberous.in',
-    //    'https://stagingadmin.cyberous.in',
+    //    'https://staging.tirupatitravels.com',
+    //    'https://stagingadmin.tirupatitravels.com',
     // ],
-   
+
     credentials: true, // Allow credentials to be sent
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  }
-));
+  }),
+);
 
 const io = new Server(server, {
   cors: {
-  // local
-    origin: ["http://localhost:3000", 'http://localhost:3001'],
+    // local
+    origin: ["http://localhost:3000", "http://localhost:3001"],
     // staging
     // origin: [
-    //    'https://staging.cyberous.in',
-    //    'https://stagingadmin.cyberous.in',
+    //    'https://staging.tirupatitravels.com',
+    //    'https://stagingadmin.tirupatitravels.com',
     // ],
 
     methods: ["GET", "POST"],
     credentials: true,
-  }, path: '/api/tirupatitravels'
+  },
+  path: "/api/tirupatitravels",
 });
-
 
 io.on("connection", (socket) => {
   console.log("Socket connected:", socket.id);
@@ -77,7 +71,7 @@ io.on("connection", (socket) => {
     await notificationTokenModel.findOneAndUpdate(
       { user_id: data.user_id },
       { socketID: socket.id, isSignin: true },
-      { upsert: true }
+      { upsert: true },
     );
 
     console.log("Socket saved in DB for user:", data.user_id);
@@ -88,7 +82,7 @@ io.on("connection", (socket) => {
 
     await notificationTokenModel.findOneAndUpdate(
       { socketID: socket.id },
-      { isSignin: false, socketID: null }
+      { isSignin: false, socketID: null },
     );
   });
 });
@@ -97,7 +91,6 @@ app.set("io", io);
 
 app.set("trust proxy", 1);
 
-
 // const globalLimiter = rateLimit({
 //   windowMs: 15 * 60 * 1000, // 15 min
 //   max: 100, // 100 request per IP
@@ -105,13 +98,11 @@ app.set("trust proxy", 1);
 // });
 
 // app.use((req, res, next) => {
-//   if (req.path.startsWith("/api/cyberous")) {
+//   if (req.path.startsWith("/api/tirupatitravels")) {
 //     return next();
 //   }
 //   globalLimiter(req, res, next);
 // });
-
-
 
 // app.use(globalLimiter);
 // let exporesJSONConfig: bodyParser.OptionsUrlencoded = { extended: true }
@@ -120,14 +111,14 @@ app.set("trust proxy", 1);
 app.use(
   express.json({
     limit: "50mb",
-  })
+  }),
 );
 
 app.use(
   express.urlencoded({
     extended: true,
     limit: "50mb",
-  })
+  }),
 );
 declare module "express-session" {
   export interface SessionData {
@@ -154,9 +145,9 @@ if (process.env.SESSION_SECRET) {
     cookie: {
       secure: false,
       httpOnly: true,
-    //   sameSite: "none",
+      //   sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
-    //   domain:".cyberous.in"
+      //   domain:".tirupatitravels.com"
     },
     store: MongoStore.create({
       mongoUrl:
@@ -177,9 +168,6 @@ app.use(cookieParser());
 // app.use(sanitizeMiddleware);
 app.use(helmet());
 app.use("/api", userRouter);
-
-
-
 
 // app.get("/", (req, res) => {
 //   console.error("welcome api"); // stderr usually prints immediately
@@ -209,20 +197,16 @@ app.get("/api/config/statustype", async (req, res) => {
     status_type: "ACCOUNT DELETED",
     status_type_id: 999,
   });
-
 });
 
 // app.get("/api/config/notificationtype", async (req, res) => {
 //   await notificationTypeModel.create({ name: "COUNSELLOR ASSIGN", notification_type_id: 101 });
-
-
 
 //   res.status(200).json({ message: "Notification type created" });
 // });
 // app.get("/api/", (req: Request, res: Response) => {
 //   res.status(200).json("you are connected to backend")
 // })
-
 
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

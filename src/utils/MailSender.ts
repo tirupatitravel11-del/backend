@@ -35,7 +35,7 @@ export const MailSender = async ({
   );
 
   await transporter.sendMail({
-    from: `"Cyberous" <${emailAccount.email}>`, // ✅ fixed
+    from: `"Tirupati travels" <${emailAccount.email}>`, // ✅ fixed
     to: email.email,
     cc: cc?.length ? cc : undefined,
     bcc: bcc?.length ? bcc : undefined,
