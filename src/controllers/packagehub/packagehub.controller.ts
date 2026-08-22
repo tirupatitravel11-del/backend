@@ -412,7 +412,7 @@ export const getPackagesByCity = async (
 ) => {
   try {
     const { slug } = req.params;
-
+console.log(slug, "sdf")
     // =========================
     // PAGINATION
     // =========================

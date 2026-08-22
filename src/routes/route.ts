@@ -367,7 +367,11 @@ router.get("/page/:slug", getRoutePage);
 // router.post("/get-student-enrolled-batches", authMiddleware, getStuEnrolledBatches)
 // router.post("/get-all-courses-by-assigned-user", authMiddleware, getAllCoursesAtt)
 router.post("/create-update-cab-hub-page", authMiddleware, createUpdateCabPage);
-router.post("/create-update-cab-hub-page-bulk", authMiddleware, createBulkCabPages);
+router.post(
+  "/create-update-cab-hub-page-bulk",
+  authMiddleware,
+  createBulkCabPages,
+);
 router.get("/:slug", getCabPageBySlug);
 router.post("/get-page", getCabPageData);
 router.post("/dropdown-cabhub-city", getCabPageDropdown);
@@ -375,7 +379,6 @@ router.post("/dropdown-cabhub-city", getCabPageDropdown);
 //----------------------Hotel--------------------------
 router.post("/create-update-hotel", authMiddleware, createUpdateHotel);
 router.get("/hotel/:slug", getHotelsByCity);
-
 
 router.post("/create-update-package", authMiddleware, createUpdatePackage);
 router.get("/package/:slug", getPackagesByCity);
@@ -385,6 +388,5 @@ router.get("/package/single/:slug", getSinglePackage);
 
 
 // edvhsdh
-
 
 export default router;
