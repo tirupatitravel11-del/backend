@@ -145,22 +145,9 @@ import {
   getSingleNearbyCity,
   restoreNearbyCity,
 } from "../controllers/nearbycity/nearbycity.controller";
-import {
-  createBulkCabPages,
-  createUpdateCabPage,
-  getCabPageBySlug,
-  getCabPageData,
-  getCabPageDropdown,
-} from "../controllers/cabPage/cabPage.controller";
-import {
-  createUpdateHotel,
-  getHotelsByCity,
-} from "../controllers/hotel/hotel.controller";
-import {
-  createUpdatePackage,
-  getPackagesByCity,
-  getSinglePackage,
-} from "../controllers/packagehub/packagehub.controller";
+import { createBulkCabPages, createUpdateCabPage, getCabPageBySlug, getCabPageData, getCabPageDropdown } from "../controllers/cabPage/cabPage.controller";
+import { createUpdateHotel, getHotelsByCity } from "../controllers/hotel/hotel.controller";
+import { createUpdatePackage,getPackagesByCity, getSinglePackage } from "../controllers/packagehub/packagehub.controller";
 
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
 // import { createBlog, deleteBlogtwo, getBlogById, getBlogs, updateBlog } from "../controllers/blogtwo";
@@ -395,8 +382,11 @@ router.get("/hotel/:slug", getHotelsByCity);
 
 router.post("/create-update-package", authMiddleware, createUpdatePackage);
 router.get("/package/:slug", getPackagesByCity);
-router.get("/single-package/:slug", getSinglePackage);
+router.get("/package/single/:slug", getSinglePackage);
 
-// edvhsdh
+
+
+
+
 
 export default router;

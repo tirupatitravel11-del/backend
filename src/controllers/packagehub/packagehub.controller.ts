@@ -525,57 +525,41 @@ console.log(slug, "sdf")
 };
 export const getSinglePackage = async (
   req: Request,
-  res: Response,
+  res: Response
 ) => {
   try {
-    const slugParam = req.params.slug;
+    const { slug } = req.params;
 
-    const slug = Array.isArray(slugParam)
-      ? slugParam[0]
-      : slugParam;
+    console.log("🔥 SINGLE PACKAGE SLUG:", slug);
 
-    if (!slug?.trim()) {
-      return res.status(400).json({
-        success: false,
-        message: "Package slug is required.",
-      });
-    }
+    // Pehle sirf slug se check karo
+    const packageData = await PackageHubModel.findOne({
+      slug: slug,
+    });
 
-    const packageData =
-      await PackageHubModel.findOne({
-        slug: slug.trim().toLowerCase(),
-        isDeleted: false,
-        status: true,
-      })
-        .populate(
-          "cab_page_id",
-          "cityName slug",
-        )
-        .lean();
+    console.log("🔥 PACKAGE FROM DB:", packageData);
 
     if (!packageData) {
       return res.status(404).json({
         success: false,
-        message: "Package not found.",
+        message: "Package not found",
+        slug: slug,
+        data: null,
       });
     }
 
     return res.status(200).json({
       success: true,
-      message: "Package fetched successfully.",
+      message: "Package fetched successfully",
       data: packageData,
     });
-  } catch (error: any) {
-    console.error(
-      "Get Single Package Error:",
-      error,
-    );
+  } catch (error) {
+    console.error("❌ GET SINGLE PACKAGE ERROR:", error);
 
     return res.status(500).json({
       success: false,
-      message:
-        error.message ||
-        "Internal Server Error.",
+      message: "Something went wrong",
+      data: null,
     });
   }
 };

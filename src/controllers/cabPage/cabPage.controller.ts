@@ -336,6 +336,7 @@ export const getCabPageBySlug = async (req: Request, res: Response) => {
 export const getCabPageData = async (req: Request, res: Response) => {
   try {
     const { cityName } = req.body;
+console.log(req.body,"fhjdhfdh");
 
     if (!cityName) {
       return res.status(400).json({
@@ -345,7 +346,7 @@ export const getCabPageData = async (req: Request, res: Response) => {
     }
 
     const cabPage = await CabPageModel.findOne({
-      cityName: {
+      slug: {
         $regex: `^${cityName}$`,
         $options: "i",
       },
