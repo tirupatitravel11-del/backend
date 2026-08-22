@@ -523,3 +523,43 @@ export const getPackagesByCity = async (
     });
   }
 };
+export const getSinglePackage = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { slug } = req.params;
+
+    console.log("🔥 SINGLE PACKAGE SLUG:", slug);
+
+    // Pehle sirf slug se check karo
+    const packageData = await PackageHubModel.findOne({
+      slug: slug,
+    });
+
+    console.log("🔥 PACKAGE FROM DB:", packageData);
+
+    if (!packageData) {
+      return res.status(404).json({
+        success: false,
+        message: "Package not found",
+        slug: slug,
+        data: null,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Package fetched successfully",
+      data: packageData,
+    });
+  } catch (error) {
+    console.error("❌ GET SINGLE PACKAGE ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+      data: null,
+    });
+  }
+};
