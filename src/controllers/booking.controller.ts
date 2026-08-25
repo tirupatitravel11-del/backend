@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Booking from "../models/booking.model";
-import Vehicle from "../models/Vehicle.model";
+// import Vehicle from "../models/Vehicle.model";
 import User from "../models/user.model";
 
 export const createBooking = async (req: Request, res: Response) => {
@@ -42,24 +42,24 @@ export const createBooking = async (req: Request, res: Response) => {
       });
     }
 
-    const vehicle = await Vehicle.findOne({
-      _id: vehicleId,
-      isDeleted: false,
-    });
+    // const vehicle = await Vehicle.findOne({
+    //   _id: vehicleId,
+    //   isDeleted: false,
+    // });
 
-    if (!vehicle) {
-      return res.status(404).json({
-        success: false,
-        message: "Vehicle not found.",
-      });
-    }
+    // if (!vehicle) {
+    //   return res.status(404).json({
+    //     success: false,
+    //     message: "Vehicle not found.",
+    //   });
+    // }
 
-    if (!vehicle.isAvailable) {
-      return res.status(400).json({
-        success: false,
-        message: "Vehicle is not available.",
-      });
-    }
+    // if (!vehicle.isAvailable) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Vehicle is not available.",
+    //   });
+    // }
 
     if (tripType === "Round Trip" && !returnDate) {
       return res.status(400).json({
