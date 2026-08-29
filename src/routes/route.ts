@@ -148,6 +148,8 @@ import {
 import { createBulkCabPages, createUpdateCabPage, getCabPageBySlug, getCabPageData, getCabPageDropdown } from "../controllers/cabPage/cabPage.controller";
 import { createUpdateHotel, getHotelsByCity } from "../controllers/hotel/hotel.controller";
 import { createUpdatePackage,getPackagesByCity, getSinglePackage } from "../controllers/packagehub/packagehub.controller";
+import { bulkCreateRoutes, createRoutes, deleteRoutes, getAllRoutess, getSingleRoutes, updateRoutes } from "../controllers/routes/routes.controller";
+
 
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
 // import { createBlog, deleteBlogtwo, getBlogById, getBlogs, updateBlog } from "../controllers/blogtwo";
@@ -372,7 +374,7 @@ router.post(
   authMiddleware,
   createBulkCabPages,
 );
-router.get("/:slug", getCabPageBySlug);
+
 router.post("/get-page", getCabPageData);
 router.post("/dropdown-cabhub-city", getCabPageDropdown);
 
@@ -385,8 +387,13 @@ router.get("/package/:slug", getPackagesByCity);
 router.get("/package/single/:slug", getSinglePackage);
 
 
-
+router.post("/create-routes-new", createRoutes);
+router.get("/get-all-routes-new", getAllRoutess);
+router.get("/get-single-routes-new/single/:slug", getSingleRoutes);
+router.put("/update-routes-new/:slug", updateRoutes);
+router.delete("/delete-routes-new/:slug", deleteRoutes);
+router.post("/routesbulkcreate-new", bulkCreateRoutes);
 
 // edvhsdh
-
+router.get("/:slug", getCabPageBySlug);
 export default router;
