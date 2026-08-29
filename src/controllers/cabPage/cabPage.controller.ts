@@ -245,6 +245,8 @@ export const createUpdateCabPage = async (req: Request, res: Response) => {
 
 export const getCabPageBySlug = async (req: Request, res: Response) => {
   try {
+    console.log("aaaa");
+    
     const { slug } = req.params;
 
     if (!slug) {
