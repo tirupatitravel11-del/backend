@@ -32,12 +32,17 @@ const PORT = process.env.PORT;
 app.use(
   cors({
     // local
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    // origin: ["http://localhost:3000", "http://localhost:3001"],
     // staging
     // origin: [
-    //    'https://staging.tirupatitravels.com',
-    //    'https://stagingadmin.tirupatitravels.com',
+    //    'https://www.tirupatitravel.in/',
+    //    'https://www.admin.tirupatitravel.in/',
     // ],
+    // production
+    origin: [
+        'https://www.tirupatitravel.in/',
+       'https://www.admin.tirupatitravel.in/',
+    ],
 
     credentials: true, // Allow credentials to be sent
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -47,17 +52,17 @@ app.use(
 const io = new Server(server, {
   cors: {
     // local
-    origin: ["http://localhost:3000", "http://localhost:3001"],
-    // staging
-    // origin: [
-    //    'https://staging.tirupatitravels.com',
-    //    'https://stagingadmin.tirupatitravels.com',
-    // ],
+    // origin: ["http://localhost:3000", "http://localhost:3001"],
+    // production
+    origin: [
+          'https://www.tirupatitravel.in/',
+       'https://www.admin.tirupatitravel.in/',
+    ],
 
     methods: ["GET", "POST"],
     credentials: true,
   },
-  path: "/api/tirupatitravels",
+  path: "/api/tirupatitravel",
 });
 
 io.on("connection", (socket) => {
