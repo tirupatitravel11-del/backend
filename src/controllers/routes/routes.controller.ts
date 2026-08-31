@@ -21,7 +21,7 @@ const createRoutes = async (req: Request, res: Response) => {
       });
     }
 
-    const slug = `${fromCity}-${toCity}`
+    const slug = `${fromCity}-to-${toCity}`
       .toLowerCase()
       .trim()
       .replace(/\s+/g, "-")
@@ -94,6 +94,8 @@ const getAllRoutess = async (req: Request, res: Response) => {
 
 const getSingleRoutes = async (req: Request, res: Response) => {
   try {
+    console.log("ssss");
+    
     const { slug } = req.params;
 
     const route = await Routes.findOne({
@@ -223,7 +225,7 @@ console.log("11")
       fromCity: route.fromCity,
       toCity: route.toCity,
 
-      slug: `${route.fromCity}-${route.toCity}`
+      slug: `${route.fromCity}-to-${route.toCity}`
         .toLowerCase()
         .trim()
         .replace(/\s+/g, "-")
