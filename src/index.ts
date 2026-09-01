@@ -32,12 +32,12 @@ const PORT = process.env.PORT;
 app.use(
   cors({
     // local
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    // origin: ["http://localhost:3000", "http://localhost:3001"],
     // production
-    // origin: [
-    //     'https://tirupatitravel.in/',
-    //    'https://cms.tirupatitravel.in/',
-    // ],
+    origin: [
+        'https://tirupatitravel.in/',
+       'https://cms.tirupatitravel.in/',
+    ],
 
     credentials: true, // Allow credentials to be sent
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -47,12 +47,12 @@ app.use(
 const io = new Server(server, {
   cors: {
     // local
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    // origin: ["http://localhost:3000", "http://localhost:3001"],
     // production
-    // origin: [
-    //       'https://tirupatitravel.in/',
-    //    'https://cms.tirupatitravel.in/',
-    // ],
+    origin: [
+          'https://tirupatitravel.in/',
+       'https://cms.tirupatitravel.in/',
+    ],
 
     methods: ["GET", "POST"],
     credentials: true,
@@ -143,11 +143,11 @@ if (process.env.SESSION_SECRET) {
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
+      secure: true,
       httpOnly: true,
         // sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
-        // domain:".tirupatitravel.in"
+        domain:".tirupatitravel.in"
     },
     store: MongoStore.create({
       mongoUrl:
@@ -213,3 +213,4 @@ server.listen(PORT, () => {
 });
 
 
+// hgjgrrdrgrgedfsss
