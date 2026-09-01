@@ -32,16 +32,11 @@ const PORT = process.env.PORT;
 app.use(
   cors({
     // local
-    // origin: ["http://localhost:3000", "http://localhost:3001"],
-    // staging
-    origin: [
-       'https://www.tirupatitravel.in/',
-       'https://www.cms.tirupatitravel.in/',
-    ],
+    origin: ["http://localhost:3000", "http://localhost:3001"],
     // production
     // origin: [
-    //     'https://www.tirupatitravel.in/',
-    //    'https://www.cms.tirupatitravel.in/',
+    //     'https://tirupatitravel.in/',
+    //    'https://cms.tirupatitravel.in/',
     // ],
 
     credentials: true, // Allow credentials to be sent
@@ -52,12 +47,12 @@ app.use(
 const io = new Server(server, {
   cors: {
     // local
-    // origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: ["http://localhost:3000", "http://localhost:3001"],
     // production
-    origin: [
-          'https://www.tirupatitravel.in/',
-       'https://www.cms.tirupatitravel.in/',
-    ],
+    // origin: [
+    //       'https://tirupatitravel.in/',
+    //    'https://cms.tirupatitravel.in/',
+    // ],
 
     methods: ["GET", "POST"],
     credentials: true,
@@ -148,11 +143,11 @@ if (process.env.SESSION_SECRET) {
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: true,
+      secure: false,
       httpOnly: true,
         // sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
-        domain:".tirupatitravel.in"
+        // domain:".tirupatitravel.in"
     },
     store: MongoStore.create({
       mongoUrl:
@@ -216,3 +211,5 @@ app.get("/api/config/statustype", async (req, res) => {
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+
