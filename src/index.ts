@@ -32,16 +32,16 @@ const PORT = process.env.PORT;
 app.use(
   cors({
     // local
-    // origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: ["http://localhost:3000", "http://localhost:3001"],
     // staging
-    origin: [
-       'https://www.tirupatitravel.in/',
-       'https://www.cms.tirupatitravel.in/',
-    ],
+    // origin: [
+    //    'https://tirupatitravel.in/',
+    //    'https://cms.tirupatitravel.in/',
+    // ],
     // production
     // origin: [
-    //     'https://www.tirupatitravel.in/',
-    //    'https://www.cms.tirupatitravel.in/',
+    //     'https://tirupatitravel.in/',
+    //    'https://cms.tirupatitravel.in/',
     // ],
 
     credentials: true, // Allow credentials to be sent
@@ -52,12 +52,12 @@ app.use(
 const io = new Server(server, {
   cors: {
     // local
-    // origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: ["http://localhost:3000", "http://localhost:3001"],
     // production
-    origin: [
-          'https://www.tirupatitravel.in/',
-       'https://www.cms.tirupatitravel.in/',
-    ],
+    // origin: [
+    //       'https://tirupatitravel.in/',
+    //    'https://cms.tirupatitravel.in/',
+    // ],
 
     methods: ["GET", "POST"],
     credentials: true,
@@ -218,4 +218,4 @@ server.listen(PORT, () => {
 });
 
 
-// dhhd
+// yy
