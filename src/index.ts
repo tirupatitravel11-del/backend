@@ -35,8 +35,8 @@ app.use(
     // origin: ["http://localhost:3000", "http://localhost:3001"],
     // production
     origin: [
-        'https://tirupatitravel.in/',
-       'https://cms.tirupatitravel.in/',
+        'https://tirupatitravel.in',
+       'https://cms.tirupatitravel.in',
     ],
 
     credentials: true, // Allow credentials to be sent
@@ -50,8 +50,8 @@ const io = new Server(server, {
     // origin: ["http://localhost:3000", "http://localhost:3001"],
     // production
     origin: [
-          'https://tirupatitravel.in/',
-       'https://cms.tirupatitravel.in/',
+          'https://tirupatitravel.in',
+       'https://cms.tirupatitravel.in',
     ],
 
     methods: ["GET", "POST"],
@@ -213,4 +213,3 @@ server.listen(PORT, () => {
 });
 
 
-// hgjgrrdrgrgedf
