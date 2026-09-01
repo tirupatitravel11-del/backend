@@ -34,15 +34,15 @@ app.use(
     // local
     // origin: ["http://localhost:3000", "http://localhost:3001"],
     // staging
-    // origin: [
-    //    'https://www.tirupatitravel.in/',
-    //    'https://www.admin.tirupatitravel.in/',
-    // ],
-    // production
     origin: [
-        'https://www.tirupatitravel.in/',
-       'https://www.admin.tirupatitravel.in/',
+       'https://www.tirupatitravel.in/',
+       'https://www.cms.tirupatitravel.in/',
     ],
+    // production
+    // origin: [
+    //     'https://www.tirupatitravel.in/',
+    //    'https://www.cms.tirupatitravel.in/',
+    // ],
 
     credentials: true, // Allow credentials to be sent
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -56,7 +56,7 @@ const io = new Server(server, {
     // production
     origin: [
           'https://www.tirupatitravel.in/',
-       'https://www.admin.tirupatitravel.in/',
+       'https://www.cms.tirupatitravel.in/',
     ],
 
     methods: ["GET", "POST"],
@@ -148,11 +148,11 @@ if (process.env.SESSION_SECRET) {
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
+      secure: true,
       httpOnly: true,
-      //   sameSite: "none",
+        // sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
-      //   domain:".tirupatitravels.com"
+        domain:".tirupatitravel.in"
     },
     store: MongoStore.create({
       mongoUrl:
@@ -174,10 +174,10 @@ app.use(cookieParser());
 app.use(helmet());
 app.use("/api", userRouter);
 
-// app.get("/", (req, res) => {
-//   console.error("welcome api"); // stderr usually prints immediately
-//   res.send("Hello from TypeScript + Node.js server!");
-// });
+app.get("/", (req, res) => {
+  console.error("welcome api"); // stderr usually prints immediately
+  res.send("Hello from TypeScript + Node.js server!");
+});
 
 // // app.use("/api/stripe", stripewebhook);
 
