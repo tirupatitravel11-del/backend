@@ -35,13 +35,13 @@ app.use(
     origin: ["http://localhost:3000", "http://localhost:3001"],
     // staging
     // origin: [
-    //    'https://www.tirupatitravel.in/',
-    //    'https://www.cms.tirupatitravel.in/',
+    //    'https://tirupatitravel.in/',
+    //    'https://cms.tirupatitravel.in/',
     // ],
     // production
     // origin: [
-    //     'https://www.tirupatitravel.in/',
-    //    'https://www.cms.tirupatitravel.in/',
+    //     'https://tirupatitravel.in/',
+    //    'https://cms.tirupatitravel.in/',
     // ],
 
     credentials: true, // Allow credentials to be sent
@@ -55,8 +55,8 @@ const io = new Server(server, {
     origin: ["http://localhost:3000", "http://localhost:3001"],
     // production
     // origin: [
-    //       'https://www.tirupatitravel.in/',
-    //    'https://www.cms.tirupatitravel.in/',
+    //       'https://tirupatitravel.in/',
+    //    'https://cms.tirupatitravel.in/',
     // ],
 
     methods: ["GET", "POST"],
@@ -148,11 +148,11 @@ if (process.env.SESSION_SECRET) {
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
+      secure: true,
       httpOnly: true,
         // sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
-        // domain:".tirupatitravel.in"
+        domain:".tirupatitravel.in"
     },
     store: MongoStore.create({
       mongoUrl:
