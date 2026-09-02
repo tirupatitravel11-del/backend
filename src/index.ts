@@ -147,7 +147,7 @@ if (process.env.SESSION_SECRET) {
       httpOnly: true,
         // sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
-        domain:".tirupatitravel.in"
+        // domain:".tirupatitravel.in"
     },
     store: MongoStore.create({
       mongoUrl:
@@ -213,3 +213,4 @@ server.listen(PORT, () => {
 });
 
 
+// hgjgrrdrgrgedfsss
