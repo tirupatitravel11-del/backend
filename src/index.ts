@@ -19,7 +19,6 @@ import notificationTokenModel from "./models/notification/notificationTokenModel
 // import { sanitizeMiddleware } from "./utils/sanitize";
 
 import dns from "dns";
-import mongoose from "mongoose";
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
@@ -34,8 +33,16 @@ app.use(
   cors({
     // local
     // origin: ["http://localhost:3000", "http://localhost:3001"],
+    // staging
+    origin: [
+       'https://www.tirupatitravel.in/',
+       'https://www.cms.tirupatitravel.in/',
+    ],
     // production
-        origin: ['https://tirupatitravel.in','https://cms.tirupatitravel.in'],
+    // origin: [
+    //     'https://www.tirupatitravel.in/',
+    //    'https://www.cms.tirupatitravel.in/',
+    // ],
 
     credentials: true, // Allow credentials to be sent
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -47,7 +54,10 @@ const io = new Server(server, {
     // local
     // origin: ["http://localhost:3000", "http://localhost:3001"],
     // production
-    origin: ['https://tirupatitravel.in','https://cms.tirupatitravel.in'],
+    origin: [
+          'https://www.tirupatitravel.in/',
+       'https://www.cms.tirupatitravel.in/',
+    ],
 
     methods: ["GET", "POST"],
     credentials: true,
@@ -142,7 +152,7 @@ if (process.env.SESSION_SECRET) {
       httpOnly: true,
         // sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
-        // domain:".tirupatitravel.in"
+        domain:".tirupatitravel.in"
     },
     store: MongoStore.create({
       mongoUrl:
@@ -163,37 +173,7 @@ app.use(cookieParser());
 // app.use(sanitizeMiddleware);
 app.use(helmet());
 app.use("/api", userRouter);
-app.get("/db-status", async (req, res) => {
-  try {
-    const connection = mongoose.connection;
-    const state = connection.readyState;
 
-    if (state !== 1 || !connection.db) {
-      return res.status(503).json({
-        success: false,
-        database: "Not Connected",
-        readyState: state,
-      });
-    }
-
-    await connection.db.admin().ping();
-
-    return res.json({
-      success: true,
-      database: "Connected",
-      readyState: state,
-      host: connection.host,
-      databaseName: connection.name,
-      ping: "OK",
-    });
-  } catch (error: any) {
-    return res.status(503).json({
-      success: false,
-      database: "Connection Error",
-      error: error.message,
-    });
-  }
-});
 app.get("/", (req, res) => {
   console.error("welcome api"); // stderr usually prints immediately
   res.send("Hello from TypeScript + Node.js server!");
@@ -236,6 +216,3 @@ app.get("/api/config/statustype", async (req, res) => {
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
-
-
-// hgjgrrdrgrgedfsss
