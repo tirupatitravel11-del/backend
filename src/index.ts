@@ -24,7 +24,7 @@ import mongoose from "mongoose";
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 dotenv.config();
-// connectDB();
+connectDB();
 
 const app = express();
 const server = http.createServer(app);
@@ -239,20 +239,9 @@ app.get("/api/config/statustype", async (req, res) => {
 //   res.status(200).json("you are connected to backend")
 // })
 
-const startServer = async () => {
-  try {
-    await connectDB();
-
-    server.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  } catch (error) {
-    console.error("Server startup failed:", error);
-    process.exit(1);
-  }
-};
-
-startServer();
+server.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
 
 
 // hgjgrrdrgrgedfsss
