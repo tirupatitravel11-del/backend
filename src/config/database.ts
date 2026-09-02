@@ -9,7 +9,9 @@ const connectDB = async () => {
     try {
         if(MONGODB_URL){
         await mongoose.connect(MONGODB_URL)
-        console.log("MongoDB connected");
+        console.log(MONGODB_URL,"MongoDB connected");
+            console.log("SERVER_TYPE =", process.env.SERVER_TYPE);
+    console.log("MONGODB_URL exists =", !!MONGODB_URL);
         }
     } catch (error) {
         console.log("Not Connected", error);
