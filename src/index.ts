@@ -206,12 +206,35 @@ app.get("/db-status", async (req, res) => {
   }
 });
 app.get("/env-statuss", (req, res) => {
-  return res.json({
-    PORT: process.env.PORT,
-    STAGING_MONGODB_URL: process.env.STAGING_MONGODB_URL,
-    MONGODB_URL: process.env.MONGODB_URL,
-    DB_AUTH_SECRET: process.env.DB_AUTH_SECRET,
-    SERVER_TYPE: process.env.SERVER_TYPE,
+  const selectedMongoUrl =
+    process.env.SERVER_TYPE === "staging"
+      ? process.env.STAGING_MONGODB_URL
+      : process.env.MONGODB_URL;
+
+  return res.status(200).json({
+    PORT: process.env.PORT ?? null,
+
+    STAGING_MONGODB_URL: process.env.STAGING_MONGODB_URL ?? null,
+
+    MONGODB_URL: process.env.MONGODB_URL ?? null,
+
+    DB_AUTH_SECRET: process.env.DB_AUTH_SECRET ?? null,
+
+    SERVER_TYPE: process.env.SERVER_TYPE ?? null,
+
+    mongo: {
+      selected: process.env.SERVER_TYPE === "staging"
+        ? "STAGING_MONGODB_URL"
+        : "MONGODB_URL",
+
+      selectedUrl: selectedMongoUrl ?? null,
+
+      connected: mongoose.connection.readyState === 1,
+
+      readyState: mongoose.connection.readyState,
+    },
+
+    timestamp: new Date().toISOString(),
   });
 });
 app.get("/", (req, res) => {
