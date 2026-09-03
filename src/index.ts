@@ -6,15 +6,15 @@ import connectDB from "./config/database";
 import bodyParser from "body-parser";
 import expressSession from "express-session";
 import MongoStore from "connect-mongo";
-import http from "http";
-import { Server } from "socket.io";
+// import http from "http";
+// import { Server } from "socket.io";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import mongoSanitize from "express-mongo-sanitize";
 import cookieParser from "cookie-parser";
 import statusTypeModel from "./models/statusTypeModel";
 import { Requser } from "./types/type";
-import notificationTokenModel from "./models/notification/notificationTokenModel";
+// import notificationTokenModel from "./models/notification/notificationTokenModel";
 // import { redisConnection } from "./redisConnection/redis";
 // import { sanitizeMiddleware } from "./utils/sanitize";
 
@@ -26,7 +26,7 @@ dotenv.config();
 connectDB();
 
 const app = express();
-const server = http.createServer(app);
+// const server = http.createServer(app);
 const PORT = process.env.PORT;
 
 app.use(
@@ -49,50 +49,50 @@ app.use(
   }),
 );
 
-const io = new Server(server, {
-  cors: {
-    // local
-    // origin: ["http://localhost:3000", "http://localhost:3001"],
-    // production
-    origin: [
-          'https://tirupatitravel.in',
-       'https://cms.tirupatitravel.in',
-    ],
+// const io = new Server(server, {
+//   cors: {
+//     // local
+//     origin: ["http://localhost:3000", "http://localhost:3001"],
+//     // production
+//     // origin: [
+//     //       'https://tirupatitravel.in',
+//     //    'https://cms.tirupatitravel.in',
+//     // ],
 
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-  path: "/api/tirupatitravel",
-});
+//     methods: ["GET", "POST"],
+//     credentials: true,
+//   },
+//   path: "/api/tirupatitravel",
+// });
 
-io.on("connection", (socket) => {
-  console.log("Socket connected:", socket.id);
+// io.on("connection", (socket) => {
+//   console.log("Socket connected:", socket.id);
 
-  socket.on("user-online", async (data) => {
-    console.log("User-online received:", data.user_id, socket.id);
+//   socket.on("user-online", async (data) => {
+//     console.log("User-online received:", data.user_id, socket.id);
 
-    if (!data?.user_id) return; // safety check
+//     if (!data?.user_id) return; // safety check
 
-    await notificationTokenModel.findOneAndUpdate(
-      { user_id: data.user_id },
-      { socketID: socket.id, isSignin: true },
-      { upsert: true },
-    );
+//     await notificationTokenModel.findOneAndUpdate(
+//       { user_id: data.user_id },
+//       { socketID: socket.id, isSignin: true },
+//       { upsert: true },
+//     );
 
-    console.log("Socket saved in DB for user:", data.user_id);
-  });
+//     console.log("Socket saved in DB for user:", data.user_id);
+//   });
 
-  socket.on("disconnect", async () => {
-    console.log("User disconnected:", socket.id);
+//   socket.on("disconnect", async () => {
+//     console.log("User disconnected:", socket.id);
 
-    await notificationTokenModel.findOneAndUpdate(
-      { socketID: socket.id },
-      { isSignin: false, socketID: null },
-    );
-  });
-});
+//     await notificationTokenModel.findOneAndUpdate(
+//       { socketID: socket.id },
+//       { isSignin: false, socketID: null },
+//     );
+//   });
+// });
 
-app.set("io", io);
+// app.set("io", io);
 
 app.set("trust proxy", 1);
 
@@ -151,8 +151,8 @@ if (process.env.SESSION_SECRET) {
       secure: true,
       httpOnly: true,
         // sameSite: "none",
-      maxAge: 24 * 60 * 60 * 1000,
-        domain:".tirupatitravel.in"
+      // maxAge: 24 * 60 * 60 * 1000,
+        // domain:".tirupatitravel.in"
     },
     store: MongoStore.create({
       mongoUrl:
@@ -213,6 +213,6 @@ app.get("/api/config/statustype", async (req, res) => {
 //   res.status(200).json("you are connected to backend")
 // })
 
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
