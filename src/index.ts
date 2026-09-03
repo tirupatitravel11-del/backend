@@ -32,12 +32,12 @@ const PORT = process.env.PORT;
 app.use(
   cors({
     // local
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    // origin: ["http://localhost:3000", "http://localhost:3001"],
     // staging
-    // origin: [
-    //    'https://tirupatitravel.in',
-    //    'https://cms.tirupatitravel.in',
-    // ],
+    origin: [
+       'https://tirupatitravel.in',
+       'https://cms.tirupatitravel.in',
+    ],
     // production
     // origin: [
     //     'https://tirupatitravel.in',
@@ -148,7 +148,7 @@ if (process.env.SESSION_SECRET) {
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
+      secure: true,
       httpOnly: true,
         // sameSite: "none",
       // maxAge: 24 * 60 * 60 * 1000,
