@@ -205,6 +205,15 @@ app.get("/db-status", async (req, res) => {
     });
   }
 });
+app.get("/env-statuss", (req, res) => {
+  return res.json({
+    PORT: process.env.PORT,
+    STAGING_MONGODB_URL: process.env.STAGING_MONGODB_URL,
+    MONGODB_URL: process.env.MONGODB_URL,
+    DB_AUTH_SECRET: process.env.DB_AUTH_SECRET,
+    SERVER_TYPE: process.env.SERVER_TYPE,
+  });
+});
 app.get("/", (req, res) => {
   console.error("welcome api"); // stderr usually prints immediately
   res.send("Hello from TypeScript + Node.js server!");
