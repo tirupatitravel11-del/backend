@@ -36,7 +36,7 @@ app.use(
     // staging
     origin: [
        'https://tirupatitravel.in',
-       'https://www.cms.tirupatitravel.in',
+       'https://cms.tirupatitravel.in',
     ],
     // production
     // origin: [
