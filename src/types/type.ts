@@ -75,19 +75,19 @@ export interface Permission {
   updated_at?: Date;
 }
 
-// export interface Blog {
-//   _id?: Types.ObjectId;
-//   title: string;
-//   content: string;
-//   author: string;
-//   tags?: string[];
-//   image?: string;
-//   isPublished?: boolean;
-//   created_by?: Types.ObjectId;
-//   created_at?: string;
-//   updated_by?: Types.ObjectId;
-//   updated_at?: string;
-// }
+export interface Blog {
+  _id?: Types.ObjectId;
+  title: string;
+  content: string;
+  author: string;
+  tags?: string[];
+  image?: string;
+  isPublished?: boolean;
+  created_by?: Types.ObjectId;
+  created_at?: string;
+  updated_by?: Types.ObjectId;
+  updated_at?: string;
+}
 // export interface Batch {
 //   _id?: Types.ObjectId;
 //   name: string;
@@ -308,47 +308,47 @@ export interface Permission {
 //   updated_at?: Date;
 // }
 
-// export interface ImageObject {
-//   key: string;
-// }
+export interface ImageObject {
+  key: string;
+}
 
-// export interface BlogSection {
-//   id?: string;
-//   type: "text" | "heading" | "subheading" | "list" | "image";
-//   content?: string;
-//   items?: string[];
-//   image?: ImageObject;
+export interface BlogSection {
+  id?: string;
+  type: "text" | "heading" | "subheading" | "list" | "image";
+  content?: string;
+  items?: string[];
+  image?: ImageObject;
 
-//   // 🔥 RUNTIME FIELD
-//   imageUrl?: string;
-// }
+  // 🔥 RUNTIME FIELD
+  imageUrl?: string;
+}
 
-// export interface BlogResponse {
-//   _id: string;
-//   title: string;
-//   author: string;
-//   category: string;
+export interface BlogResponse {
+  _id: string;
+  title: string;
+  author: string;
+  category: string;
 
-//   heroImage?: ImageObject | null;
+  heroImage?: ImageObject | null;
 
-//   // 🔥 RUNTIME FIELD
-//   heroImageUrl?: string;
+  // 🔥 RUNTIME FIELD
+  heroImageUrl?: string;
 
-//   sections?: BlogSection[];
-// }
+  sections?: BlogSection[];
+}
 
-// export interface Iblog extends DocumentResult<Iblog>, Document {
-//   title: string,
-//   author: string,
-//   slug: string,
-//   content: object, // Editor.js JSON
-//   blogstatus: "draft" | "published"
-//   publisheddate?: Date,
-//   status: { type: number, default: 30 }
-//   created_at?: Date;
-//   updated_at?: Date;
-//   updated_by?: mongoose.Types.ObjectId;
-// }
+export interface Iblog extends DocumentResult<Iblog>, Document {
+  title: string,
+  author: string,
+  slug: string,
+  content: object, // Editor.js JSON
+  blogstatus: "draft" | "published"
+  publisheddate?: Date,
+  status: { type: number, default: 30 }
+  created_at?: Date;
+  updated_at?: Date;
+  updated_by?: mongoose.Types.ObjectId;
+}
 // export interface FlashAnnouncementType
 //   extends DocumentResult<FlashAnnouncementType>, Document {
 //   title: string;
