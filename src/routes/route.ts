@@ -28,7 +28,7 @@ import {
 import authMiddleware from "../middleware/authMiddleware";
 // import { validateUpload } from "../middleware/validateUpload"
 // import { addAbortListener } from "events";
-// import { blogPublishStatus, createBlog, deleteBlog, editBlog, getAllBlogs, getAllBlogsAdmin, getSingleBlog, getSingleBlogAdmin, restoreBlog } from "../controllers/blog";
+import { blogPublishStatus, createBlog, deleteBlog, editBlog, getAllBlogs, getAllBlogsAdmin, getSingleBlog, getSingleBlogAdmin, restoreBlog,getBlogImage,uploadBlogImage,deleteBlogImage } from "../controllers/blog";
 // import { addClass, addStudentToClass, deleteClass, getClass, removeStudentFromClass, } from "../controllers/class";
 // import {
 //   assignInstructorToBatch,
@@ -149,6 +149,8 @@ import { createBulkCabPages, createUpdateCabPage, getCabPageBySlug, getCabPageDa
 import { createUpdateHotel, getHotelsByCity } from "../controllers/hotel/hotel.controller";
 import { createUpdatePackage,getPackagesByCity, getSinglePackage } from "../controllers/packagehub/packagehub.controller";
 import { bulkCreateRoutes, createRoutes, deleteRoutes, getAllRoutess, getSingleRoutes, updateRoutes } from "../controllers/routes/routes.controller";
+import { createBookingcab, getCabBookings } from "../controllers/bookingcab/bookingcab.controller";
+
 
 
 // import { deleteR2Image, getObjectUrl, uploadToR2 } from "../controllers/cloudR2";
@@ -296,18 +298,31 @@ router.get("/page/:slug", getRoutePage);
 // router.post("/get-presignedurl", authMiddleware, getObjectUrl);
 // router.post("/delete-image", authMiddleware, deleteR2Image);
 
-//------------------------blog------------------------
-// router.post("/create-blog", authMiddleware, createBlog)
-// router.post("/edit-blog", authMiddleware, editBlog)
-// router.post("/delete-blog", authMiddleware, deleteBlog)
-// router.post("/restore-blog", authMiddleware, restoreBlog)
-// router.post("/get-blog-admin", authMiddleware, getSingleBlogAdmin)
-// router.post("/get-blog", getSingleBlog)
-// router.post("/blog-status", authMiddleware, blogPublishStatus)
+// ------------------------blog------------------------
+router.post("/create-blog", authMiddleware, createBlog)
+router.post("/edit-blog", authMiddleware, editBlog)
+router.post("/delete-blog", authMiddleware, deleteBlog)
+router.post("/restore-blog", authMiddleware, restoreBlog)
+router.post("/get-blog-admin", authMiddleware, getSingleBlogAdmin)
+router.post("/get-blog", getSingleBlog)
+router.post("/blog-status", authMiddleware, blogPublishStatus)
 // router.post("/get-blog-by-id", getBlogbyId)
-// router.post("/get-all-blog-admin", authMiddleware, getAllBlogsAdmin)
-// router.post("/get-all-blogs", getAllBlogs)
+router.post("/get-all-blog-admin", authMiddleware, getAllBlogsAdmin)
+router.post("/get-all-blogs", getAllBlogs)
+router.post(
+  "/upload-blog-image",
+  authMiddleware,
+  upload.single("file"),
+  uploadBlogImage
+);
 
+router.get("/blog-image/:id", getBlogImage);
+
+router.delete(
+  "/delete-blog-image/:id",
+  authMiddleware,
+  deleteBlogImage
+);
 //---------------------profile-------------------------
 // router.post("/get-user-profile", authMiddleware, getUserProfile);
 // router.post("/create-update-user-profile", authMiddleware, createOrUpdateProfile);
@@ -396,4 +411,8 @@ router.post("/routesbulkcreate-new", bulkCreateRoutes);
 
 // edvhsdh
 router.get("/:slug", getCabPageBySlug);
+
+
+router.post("/create-booking-cab",createBookingcab);
+router.post("/get-booking-cab",getCabBookings);
 export default router;

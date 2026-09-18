@@ -35,10 +35,7 @@ app.use(
     // local
     // origin: ["http://localhost:3000", "http://localhost:3001"],
     // staging
-    origin: [
-       'https://tirupatitravel.in',
-       'https://cms.tirupatitravel.in',
-    ],
+    origin: ['https://tirupatitravel.in','https://cms.tirupatitravel.in'],
     // production
     // origin: [
     //     'https://tirupatitravel.in',
@@ -55,10 +52,7 @@ const io = new Server(server, {
     // local
     // origin: ["http://localhost:3000", "http://localhost:3001"],
     // production
-    origin: [
-          'https://tirupatitravel.in',
-       'https://cms.tirupatitravel.in',
-    ],
+    origin: ['https://tirupatitravel.in','https://cms.tirupatitravel.in'],
 
     methods: ["GET", "POST"],
     credentials: true,
@@ -174,69 +168,7 @@ app.use(cookieParser());
 // app.use(sanitizeMiddleware);
 app.use(helmet());
 app.use("/api", userRouter);
-app.get("/db-status", async (req, res) => {
-  try {
-    const connection = mongoose.connection;
-    const state = connection.readyState;
 
-    if (state !== 1 || !connection.db) {
-      return res.status(503).json({
-        success: false,
-        database: "Not Connected",
-        readyState: state,
-      });
-    }
-
-    await connection.db.admin().ping();
-
-    return res.json({
-      success: true,
-      database: "Connected",
-      readyState: state,
-      host: connection.host,
-      databaseName: connection.name,
-      ping: "OK",
-    });
-  } catch (error: any) {
-    return res.status(503).json({
-      success: false,
-      database: "Connection Error",
-      error: error.message,
-    });
-  }
-});
-app.get("/env-statuss", (req, res) => {
-  const selectedMongoUrl =
-    process.env.SERVER_TYPE === "staging"
-      ? process.env.STAGING_MONGODB_URL
-      : process.env.MONGODB_URL;
-
-  return res.status(200).json({
-    PORT: process.env.PORT ?? null,
-
-    STAGING_MONGODB_URL: process.env.STAGING_MONGODB_URL ?? null,
-
-    MONGODB_URL: process.env.MONGODB_URL ?? null,
-
-    DB_AUTH_SECRET: process.env.DB_AUTH_SECRET ?? null,
-
-    SERVER_TYPE: process.env.SERVER_TYPE ?? null,
-
-    mongo: {
-      selected: process.env.SERVER_TYPE === "staging"
-        ? "STAGING_MONGODB_URL"
-        : "MONGODB_URL",
-
-      selectedUrl: selectedMongoUrl ?? null,
-
-      connected: mongoose.connection.readyState === 1,
-
-      readyState: mongoose.connection.readyState,
-    },
-
-    timestamp: new Date().toISOString(),
-  });
-});
 app.get("/", (req, res) => {
   console.error("welcome api"); // stderr usually prints immediately
   res.send("Hello from TypeScript + Node.js server!");
@@ -257,6 +189,14 @@ app.get("/api/config/statustype", async (req, res) => {
   await statusTypeModel.create({
     status_type: "USER BLOCKED",
     status_type_id: -18,
+  });
+   await statusTypeModel.create({
+    status_type: "BLOG ACTIVE",
+    status_type_id: 13,
+  });
+  await statusTypeModel.create({
+    status_type: "BLOG DELETED",
+    status_type_id: 14,
   });
   // await statusTypeModel.create({ status_type: "USER PROFILE", status_type_id: 8 });
   // await statusTypeModel.create({ status_type: "USER PROFILE", status_type_id: 9 });
