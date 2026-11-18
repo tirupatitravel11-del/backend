@@ -1,5 +1,8 @@
-.gitignore# Node modules (bahut heavy hote hain)
+# Node modules (bahut heavy hote hain)
 node_modules/
+
+# Certificates and keys
+certs/
 
 # Logs
 npm-debug.log*
@@ -30,4 +33,5 @@ build/
 
 # Coverage reports (agar testing use karte ho)
 coverage/
-# testgit config --global user.name "Abhishek"
+# testgit config --global user.name "chiku"
+scripts/
