@@ -1,5 +1,8 @@
-.gitignore# Node modules (bahut heavy hote hain)
+# Node modules (bahut heavy hote hain)
 node_modules/
+
+# Certificates and keys
+certs/
 
 # Logs
 npm-debug.log*

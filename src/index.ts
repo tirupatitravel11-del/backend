@@ -30,18 +30,17 @@ const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT;
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "https://tirupatitravel.in",
+  "https://www.tirupatitravel.in",
+  "https://cms.tirupatitravel.in",
+];
+
 app.use(
   cors({
-    // local
-    origin: ["http://localhost:3000", "http://localhost:3001"],
-    // staging
-    // origin: ['https://tirupatitravel.in','https://cms.tirupatitravel.in'],
-    // production
-    // origin: [
-    //     'https://tirupatitravel.in',
-    //    'https://cms.tirupatitravel.in',
-    // ],
-
+    origin: allowedOrigins,
     credentials: true, // Allow credentials to be sent
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   }),
@@ -49,11 +48,7 @@ app.use(
 
 const io = new Server(server, {
   cors: {
-    // local
-    origin: ["http://localhost:3000", "http://localhost:3001"],
-    // production
-    // origin: ['https://tirupatitravel.in','https://cms.tirupatitravel.in'],
-
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -138,16 +133,17 @@ declare global {
 // }
 
 if (process.env.SESSION_SECRET) {
+  const isLocal = process.env.SERVER_TYPE === "local";
   const expressSessionOptions: expressSession.SessionOptions = {
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: true,
+      secure: isLocal ? false : true,
       httpOnly: true,
-        sameSite: "none",
+      sameSite: isLocal ? "lax" : "none",
       maxAge: 24 * 60 * 60 * 1000,
-        domain:".tirupatitravel.in"
+      domain: isLocal ? undefined : ".tirupatitravel.in",
     },
     store: MongoStore.create({
       mongoUrl:
