@@ -31,12 +31,10 @@ const blogPostSchema = new mongoose.Schema({
 });
 
 
-blogPostSchema.pre("save", function setDatetime(next) {
+blogPostSchema.pre("save", function () {
     const currentDate = new Date().toISOString();
     this.created_at = currentDate;
     this.updated_at = currentDate;
-    next();
-}
-)
+});
 const blogPostModel = mongoose.model<Blog>("blogpost", blogPostSchema);
 export default blogPostModel;

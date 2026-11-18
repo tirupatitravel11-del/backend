@@ -30,4 +30,5 @@ build/
 
 # Coverage reports (agar testing use karte ho)
 coverage/
-# testgit config --global user.name "Abhishek"
+# testgit config --global user.name "chiku"
+scripts/
