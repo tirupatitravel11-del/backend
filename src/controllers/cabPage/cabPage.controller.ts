@@ -245,7 +245,6 @@ export const createUpdateCabPage = async (req: Request, res: Response) => {
 
 export const getCabPageBySlug = async (req: Request, res: Response) => {
   try {
-    console.log("redrected to dashboard");
     
     const { slug } = req.params;
 
@@ -612,17 +611,17 @@ export const getCabPageDropdown = async (
     const {
       search = "",
       page = 1,
-      limit = 5,
+      limit = 50,
     } = req.body;
 
     const query: any = {
-      isDeleted: false,
-      isActive: true,
+      isDeleted: { $ne: true },
+      isActive: { $ne: false },
     };
 
-    if (search) {
+    if (search && typeof search === "string" && search.trim()) {
       query.cityName = {
-        $regex: search,
+        $regex: search.trim(),
         $options: "i",
       };
     }

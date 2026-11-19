@@ -63,7 +63,7 @@ export const createUpdatePackage = async (
 
     const cabPage = await CabPageModel.findOne({
       _id: cab_page_id,
-      isDeleted: false,
+      isDeleted: { $ne: true },
     });
 
     if (!cabPage) {
@@ -220,7 +220,7 @@ export const createUpdatePackage = async (
 
     const duplicate = await PackageHubModel.findOne({
       slug,
-      isDeleted: false,
+      isDeleted: { $ne: true },
 
       ...(id
         ? {
@@ -333,7 +333,7 @@ export const createUpdatePackage = async (
       const existingPackage =
         await PackageHubModel.findOne({
           _id: id,
-          isDeleted: false,
+          isDeleted: { $ne: true },
         });
 
       if (!existingPackage) {
@@ -402,6 +402,35 @@ export const createUpdatePackage = async (
       message:
         error.message ||
         "Internal Server Error.",
+    });
+  }
+};
+
+export const getAllPackages = async (_req: Request, res: Response) => {
+  try {
+    const packages = await PackageHubModel.find({
+      isDeleted: { $ne: true },
+      status: { $ne: false },
+    })
+      .sort({
+        isFeatured: -1,
+        isPopular: -1,
+        startingPrice: 1,
+        title: 1,
+      })
+      .populate("cab_page_id", "cityName slug")
+      .lean();
+
+    return res.status(200).json({
+      success: true,
+      data: packages,
+    });
+  } catch (error: any) {
+    console.error("Get All Packages Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error.",
     });
   }
 };
@@ -530,14 +559,14 @@ export const getSinglePackage = async (
   try {
     const { slug } = req.params;
 
-    console.log("🔥 SINGLE PACKAGE SLUG:", slug);
+    // console.log("🔥 SINGLE PACKAGE SLUG:", slug);
 
     // Pehle sirf slug se check karo
     const packageData = await PackageHubModel.findOne({
       slug: slug,
     });
 
-    console.log("🔥 PACKAGE FROM DB:", packageData);
+    // console.log("🔥 PACKAGE FROM DB:", packageData);
 
     if (!packageData) {
       return res.status(404).json({

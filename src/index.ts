@@ -6,15 +6,12 @@ import connectDB from "./config/database";
 import bodyParser from "body-parser";
 import expressSession from "express-session";
 import MongoStore from "connect-mongo";
-import http from "http";
-import { Server } from "socket.io";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import mongoSanitize from "express-mongo-sanitize";
 import cookieParser from "cookie-parser";
 import statusTypeModel from "./models/statusTypeModel";
 import { Requser } from "./types/type";
-import notificationTokenModel from "./models/notification/notificationTokenModel";
 // import { redisConnection } from "./redisConnection/redis";
 // import { sanitizeMiddleware } from "./utils/sanitize";
 
@@ -27,7 +24,6 @@ dotenv.config();
 connectDB();
 
 const app = express();
-const server = http.createServer(app);
 const PORT = process.env.PORT;
 
 const allowedOrigins = [
@@ -45,44 +41,6 @@ app.use(
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   }),
 );
-
-const io = new Server(server, {
-  cors: {
-    origin: allowedOrigins,
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-  path: "/api/tirupatitravel",
-});
-
-io.on("connection", (socket) => {
-  console.log("Socket connected:", socket.id);
-
-  socket.on("user-online", async (data) => {
-    console.log("User-online received:", data.user_id, socket.id);
-
-    if (!data?.user_id) return; // safety check
-
-    await notificationTokenModel.findOneAndUpdate(
-      { user_id: data.user_id },
-      { socketID: socket.id, isSignin: true },
-      { upsert: true },
-    );
-
-    console.log("Socket saved in DB for user:", data.user_id);
-  });
-
-  socket.on("disconnect", async () => {
-    console.log("User disconnected:", socket.id);
-
-    await notificationTokenModel.findOneAndUpdate(
-      { socketID: socket.id },
-      { isSignin: false, socketID: null },
-    );
-  });
-});
-
-app.set("io", io);
 
 app.set("trust proxy", 1);
 
@@ -134,17 +92,17 @@ declare global {
 
 if (process.env.SESSION_SECRET) {
   const isLocal = process.env.SERVER_TYPE === "local";
+  
   const expressSessionOptions: expressSession.SessionOptions = {
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: isLocal ? false : true,
-      httpOnly: true,
-      sameSite: isLocal ? "lax" : "none",
-      maxAge: 24 * 60 * 60 * 1000,
-      domain: isLocal ? undefined : ".tirupatitravel.in",
-    },
+  secure: !isLocal,
+  httpOnly: true,
+  sameSite: isLocal ? "lax" : "none",
+  maxAge: 24 * 60 * 60 * 1000,
+},
     store: MongoStore.create({
       mongoUrl:
         process.env.SERVER_TYPE === "staging"
@@ -212,6 +170,6 @@ app.get("/api/config/statustype", async (req, res) => {
 //   res.status(200).json("you are connected to backend")
 // })
 
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
