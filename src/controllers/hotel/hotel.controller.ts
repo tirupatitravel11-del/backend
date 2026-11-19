@@ -62,7 +62,7 @@ export const createUpdateHotel = async (req: Request, res: Response) => {
 
     const cabPage = await CabPageModel.findOne({
       _id: cab_page_id,
-      isDeleted: false,
+      isDeleted: { $ne: true },
     });
 
     if (!cabPage) {
@@ -143,7 +143,7 @@ export const createUpdateHotel = async (req: Request, res: Response) => {
     const duplicate = await HotelModel.findOne({
       cab_page_id,
       slug,
-      isDeleted: false,
+      isDeleted: { $ne: true },
       ...(id && {
         _id: {
           $ne: id,
@@ -261,13 +261,20 @@ export const createUpdateHotel = async (req: Request, res: Response) => {
 
 export const getHotelsByCity = async (req: Request, res: Response) => {
   try {
-    const { slug } = req.params;
-console.log(slug, "check")
+    const slugParam = req.params.slug;
+    const slug = Array.isArray(slugParam) ? slugParam[0] ?? "" : slugParam;
+    const cityName = slug
+      .replace(/-/g, " ")
+      .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
     // Find City
     const cabPage = await CabPageModel.findOne({
-      slug,
-      isDeleted: false,
-      isActive: true,
+      $or: [
+        { slug },
+        { cityName: { $regex: `^${cityName}$`, $options: "i" } },
+      ],
+      isDeleted: { $ne: true },
+      isActive: { $ne: false },
     });
 
     if (!cabPage) {
@@ -280,8 +287,8 @@ console.log(slug, "check")
     // Find Hotels
     const hotels = await HotelModel.find({
       cab_page_id: cabPage._id,
-      isDeleted: false,
-      isActive: true,
+      isDeleted: { $ne: true },
+      isActive: { $ne: false },
     }).sort({
       priority: 1,
       isPopular: -1,
@@ -294,6 +301,31 @@ console.log(slug, "check")
     return res.status(200).json({
       success: true,
       city: cabPage.cityName,
+      hotels,
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getAllHotels = async (_req: Request, res: Response) => {
+  try {
+    const hotels = await HotelModel.find({
+      isDeleted: { $ne: true },
+      isActive: { $ne: false },
+    })
+      .sort({
+        priority: 1,
+        isPopular: -1,
+        name: 1,
+      })
+      .populate("cab_page_id", "cityName slug");
+
+    return res.status(200).json({
+      success: true,
       hotels,
     });
   } catch (error: any) {

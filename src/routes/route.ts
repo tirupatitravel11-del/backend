@@ -146,8 +146,17 @@ import {
   restoreNearbyCity,
 } from "../controllers/nearbycity/nearbycity.controller";
 import { createBulkCabPages, createUpdateCabPage, getCabPageBySlug, getCabPageData, getCabPageDropdown } from "../controllers/cabPage/cabPage.controller";
-import { createUpdateHotel, getHotelsByCity } from "../controllers/hotel/hotel.controller";
-import { createUpdatePackage,getPackagesByCity, getSinglePackage } from "../controllers/packagehub/packagehub.controller";
+import {
+  createUpdateHotel,
+  getAllHotels,
+  getHotelsByCity,
+} from "../controllers/hotel/hotel.controller";
+import {
+  createUpdatePackage,
+  getAllPackages,
+  getPackagesByCity,
+  getSinglePackage,
+} from "../controllers/packagehub/packagehub.controller";
 import { bulkCreateRoutes, createRoutes, deleteRoutes, getAllRoutess, getSingleRoutes, updateRoutes } from "../controllers/routes/routes.controller";
 import { createBookingcab, getCabBookings } from "../controllers/bookingcab/bookingcab.controller";
 
@@ -395,9 +404,11 @@ router.post("/dropdown-cabhub-city", getCabPageDropdown);
 
 //----------------------Hotel--------------------------
 router.post("/create-update-hotel", authMiddleware, createUpdateHotel);
+router.get("/hotels", getAllHotels);
 router.get("/hotel/:slug", getHotelsByCity);
 
 router.post("/create-update-package", authMiddleware, createUpdatePackage);
+router.get("/packages", getAllPackages);
 router.get("/package/:slug", getPackagesByCity);
 router.get("/package/single/:slug", getSinglePackage);
 

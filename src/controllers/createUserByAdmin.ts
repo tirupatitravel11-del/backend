@@ -191,19 +191,9 @@ const data = logedinuser.toObject();
 export const signout = async (req: Request, res: Response) => {
   console.log("Signout called");
   try {
-    const { userId } = req.body;
-    // const date = getisotime(DateTime);
-
-    // Session exist check
-    if (!req.session) {
-      res.status(400).json({ message: "No active session found" });
-      return;
-    }
-
-    // Agar tum login ke waqt userId session me save karoge तो यहीं काम आसान हो जाएगा
-    // login me add karo -> req.session.userId = user._id;
-    // const userId = (req.session as any).userId;
-    // console.log(userId, "userId");
+    // Support both userId and user_id from frontend payload, or fallback to session
+    const userId = req.body.userId || req.body.user_id || (req.session as any)?.userId;
+    const isLocal = process.env.SERVER_TYPE === "local";
 
     console.log("Signing out userId:", userId);
     if (userId) {
@@ -214,17 +204,18 @@ export const signout = async (req: Request, res: Response) => {
       );
     }
 
-    // if (userId) {
-    //   await notificationTokenModel.findByIdAndUpdate(
-    //     userId,
-    //     { socketID:null, isSignin:false},
-    //     { new: true }
-    //   );
-    // }
+    if (!req.session) {
+      res.clearCookie("connect.sid", {
+        httpOnly: true,
+        secure: !isLocal,
+        sameSite: isLocal ? "lax" : "none",
+        path: "/",
+      });
+      res.status(200).json({ message: "Logout successful!" });
+      return;
+    }
 
-    // Destroy session from MongoStore
-    const sid = req.sessionID; // current sessionId
-    // console.log(sid, "sid");
+    const sid = req.sessionID;
 
     req.session.destroy((err) => {
       if (err) {
@@ -233,16 +224,20 @@ export const signout = async (req: Request, res: Response) => {
         return;
       }
 
-      // force remove from store (safety net)
       if (sid) {
         req.sessionStore.destroy(sid, (err) => {
           if (err) console.error("Error removing session from store:", err);
         });
       }
 
-      // Clear cookie also
+      // Must match the exact cookie flags set in index.ts
       res.clearCookie("connect.sid", {
-        path: "/", // same path as session
+        httpOnly: true,
+        secure: !isLocal,
+        sameSite: isLocal ? "lax" : "none",
+        path: "/",
+        // Note: If you kept `domain: ".tirupatitravel.in"` in index.ts, uncomment the line below:
+        // domain: isLocal ? undefined : ".tirupatitravel.in",
       });
 
       res.status(200).json({ message: "Logout successful!" });
